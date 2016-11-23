@@ -1,0 +1,49 @@
+{if $gallery}
+    {if $gallery->isShowName()}
+        <div class="page-row">
+            <h2>{$gallery->getName()}</h2>
+            <p>{$gallery->getDescription()|noescape}</p>
+        </div>
+    {/if}
+
+    <div class="row page-row">
+        <a n:foreach="$gallery->getPictures() as $image" class="text-center col-md-3 col-sm-3 col-xs-6" href="{img $image->getStructureFile()->getFile(), 1024x}" title="{$image->getName()}" data-gallery>
+            <img class="img-responsive img-thumbnail" n:img="$image->getStructureFile()->getFile(), 263x150" alt="{$image->getName()}" title="{$image->getName()}">
+        </a>
+    </div>
+
+    <!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
+    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-use-bootstrap-modal="false">
+        <!-- The container for the modal slides -->
+        <div class="slides"></div>
+        <!-- Controls for the borderless lightbox -->
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+        <!-- The modal dialog, which will be used to wrap the lightbox content -->
+        <div class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body next"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left prev">
+                            <i class="fa fa-chevron-left"></i>
+                            Předchozí
+                        </button>
+                        <button type="button" class="btn btn-primary next">
+                            Další
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/if}

@@ -1,0 +1,20 @@
+<div class="row page-row">
+    <div n:foreach="$galleries as $gallery" class="col-md-6 col-sm-6 col-xs-12 text-center">
+        <div class="album-cover">
+            <a n:cmsLink="Gallery\Gallery\Detail, 'id' => $gallery->getId()">
+                {if $gallery->getPrimaryPicture()->count()}
+                    {var $picture = $gallery->getPrimaryPicture()[0]->getStructureFile()}
+                {elseif $gallery->getPictures()->count()}
+                    {var $picture = $gallery->getPictures()[0]->getStructureFile()}
+                {else}
+                    {var $picture = null}
+                {/if}
+                <img class="img-responsive" n:img="$picture, '553x306', 'exact'" alt="{$gallery->getName()}">
+            </a>
+            <div class="desc">
+                <h4><small><a n:cmsLink="Gallery\Gallery\Detail, 'id' => $gallery->getId()">{$gallery->getName()}</a></small></h4>
+                <p>{$gallery->getDescription()|striptags|truncate:500,'...'|noescape}</p>
+            </div>
+        </div>
+    </div>
+</div>
