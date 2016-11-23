@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-namespace Dravencms\AdminModule\Components\Gallery;
+namespace Dravencms\AdminModule\Components\Gallery\GalleryGrid;
 
 
 interface GalleryGridFactory

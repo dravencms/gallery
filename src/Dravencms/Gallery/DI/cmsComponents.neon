@@ -1,0 +1,3 @@
+- Dravencms\FrontModule\Components\Gallery\Gallery\Detail\DetailFactory
+- Dravencms\FrontModule\Components\Gallery\Gallery\Overview\OverviewFactory
+- Dravencms\FrontModule\Components\Gallery\Gallery\Tag\TagFactory

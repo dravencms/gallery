@@ -3,11 +3,10 @@
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
 
-namespace App\Model\Gallery\Repository;
+namespace Dravencms\Model\Gallery\Repository;
 
-use App\Model\Article\Entities\Article;
 use App\Model\BaseRepository;
-use App\Model\Gallery\Entities\Gallery;
+use Dravencms\Model\Gallery\Entities\Gallery;
 use Gedmo\Translatable\TranslatableListener;
 use Kdyby\Doctrine\EntityManager;
 use Nette;

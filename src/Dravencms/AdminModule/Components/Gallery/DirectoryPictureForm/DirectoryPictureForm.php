@@ -18,14 +18,14 @@
  * MA 02110-1301  USA
  */
 
-namespace Dravencms\AdminModule\Components\Gallery;
+namespace Dravencms\AdminModule\Components\Gallery\DirectoryPictureForm;
 
 use Dravencms\Components\BaseFormFactory;
 use App\Model\File\Repository\StructureFileRepository;
 use App\Model\File\Repository\StructureRepository;
-use App\Model\Gallery\Entities\Gallery;
-use App\Model\Gallery\Entities\Picture;
-use App\Model\Gallery\Repository\PictureRepository;
+use Dravencms\Model\Gallery\Entities\Gallery;
+use Dravencms\Model\Gallery\Entities\Picture;
+use Dravencms\Model\Gallery\Repository\PictureRepository;
 use App\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;

@@ -1,0 +1,5 @@
+- Dravencms\AdminModule\Components\Gallery\GalleryGrid\GalleryGridFactory
+- Dravencms\AdminModule\Components\Gallery\GalleryForm\GalleryFormFactory
+- Dravencms\AdminModule\Components\Gallery\PictureForm\PictureFormFactory
+- Dravencms\AdminModule\Components\Gallery\PictureGrid\PictureGridFactory
+- Dravencms\AdminModule\Components\Gallery\DirectoryPictureForm\DirectoryPictureFormFactory

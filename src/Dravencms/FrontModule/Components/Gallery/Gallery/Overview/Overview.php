@@ -1,9 +1,9 @@
 <?php
 
-namespace Dravencms\FrontModule\Components\Gallery\Gallery;
+namespace Dravencms\FrontModule\Components\Gallery\Gallery\Overview;
 
 use Dravencms\Components\BaseControl;
-use App\Model\Gallery\Repository\GalleryRepository;
+use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Salamek\Cms\ICmsActionOption;
 
 /**

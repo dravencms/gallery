@@ -1,6 +1,6 @@
 <?php
 
-namespace Dravencms\FrontModule\Components\Gallery\Gallery;
+namespace Dravencms\FrontModule\Components\Gallery\Gallery\Tag;
 
 use Dravencms\Components\BaseControl;
 use Salamek\Cms\ICmsActionOption;

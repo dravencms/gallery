@@ -6,16 +6,16 @@
  */
 namespace Dravencms\AdminModule\GalleryModule;
 
-use Dravencms\AdminModule\Components\Gallery\DirectoryPictureFormFactory;
-use Dravencms\AdminModule\Components\Gallery\GalleryFormFactory;
-use Dravencms\AdminModule\Components\Gallery\GalleryGridFactory;
-use Dravencms\AdminModule\Components\Gallery\PictureFormFactory;
-use Dravencms\AdminModule\Components\Gallery\PictureGridFactory;
+use Dravencms\AdminModule\Components\Gallery\DirectoryPictureForm\DirectoryPictureFormFactory;
+use Dravencms\AdminModule\Components\Gallery\GalleryForm\GalleryFormFactory;
+use Dravencms\AdminModule\Components\Gallery\GalleryGrid\GalleryGridFactory;
+use Dravencms\AdminModule\Components\Gallery\PictureForm\PictureFormFactory;
+use Dravencms\AdminModule\Components\Gallery\PictureGrid\PictureGridFactory;
 use Dravencms\AdminModule\SecuredPresenter;
-use App\Model\Gallery\Entities\Gallery;
-use App\Model\Gallery\Entities\Picture;
-use App\Model\Gallery\Repository\GalleryRepository;
-use App\Model\Gallery\Repository\PictureRepository;
+use Dravencms\Model\Gallery\Entities\Gallery;
+use Dravencms\Model\Gallery\Entities\Picture;
+use Dravencms\Model\Gallery\Repository\GalleryRepository;
+use Dravencms\Model\Gallery\Repository\PictureRepository;
 use App\Model\Tag\Repository\TagRepository;
 
 /**

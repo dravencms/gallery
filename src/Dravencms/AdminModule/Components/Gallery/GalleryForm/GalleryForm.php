@@ -18,11 +18,11 @@
  * MA 02110-1301  USA
  */
 
-namespace Dravencms\AdminModule\Components\Gallery;
+namespace Dravencms\AdminModule\Components\Gallery\GalleryForm;
 
 use Dravencms\Components\BaseFormFactory;
-use App\Model\Gallery\Entities\Gallery;
-use App\Model\Gallery\Repository\GalleryRepository;
+use Dravencms\Model\Gallery\Entities\Gallery;
+use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use App\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;

@@ -1,5 +1,5 @@
 <?php
-namespace App\Model\Gallery\Entities;
+namespace Dravencms\Model\Gallery\Entities;
 
 use App\Model\File\Entities\StructureFile;
 use App\Model\Tag\Entities\Tag;

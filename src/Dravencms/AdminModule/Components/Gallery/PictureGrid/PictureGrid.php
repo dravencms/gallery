@@ -19,12 +19,12 @@
  * MA 02110-1301  USA
  */
 
-namespace Dravencms\AdminModule\Components\Gallery;
+namespace Dravencms\AdminModule\Components\Gallery\PictureGrid;
 
 use Dravencms\Components\BaseGridFactory;
-use App\Model\Gallery\Entities\Gallery;
-use App\Model\Gallery\Entities\Picture;
-use App\Model\Gallery\Repository\PictureRepository;
+use Dravencms\Model\Gallery\Entities\Gallery;
+use Dravencms\Model\Gallery\Entities\Picture;
+use Dravencms\Model\Gallery\Repository\PictureRepository;
 use App\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;

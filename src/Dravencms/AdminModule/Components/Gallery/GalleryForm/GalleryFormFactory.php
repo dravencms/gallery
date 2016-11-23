@@ -17,10 +17,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-namespace Dravencms\AdminModule\Components\Gallery;
+namespace Dravencms\AdminModule\Components\Gallery\GalleryForm;
 
 
-use App\Model\Gallery\Entities\Gallery;
+use Dravencms\Model\Gallery\Entities\Gallery;
 
 interface GalleryFormFactory
 {
