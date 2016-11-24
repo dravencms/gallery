@@ -5,7 +5,7 @@
 
 namespace Dravencms\Model\Gallery\Repository;
 
-use App\Model\BaseRepository;
+use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Gedmo\Translatable\TranslatableListener;
 use Kdyby\Doctrine\EntityManager;
@@ -14,8 +14,10 @@ use Salamek\Cms\CmsActionOption;
 use Salamek\Cms\ICmsComponentRepository;
 use Salamek\Cms\Models\ILocale;
 
-class GalleryRepository extends BaseRepository implements ICmsComponentRepository
+class GalleryRepository implements ICmsComponentRepository
 {
+    use TLocalizedRepository;
+
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $galleryRepository;
 
