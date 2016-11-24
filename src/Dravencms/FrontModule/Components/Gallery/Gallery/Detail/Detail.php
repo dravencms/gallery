@@ -2,7 +2,7 @@
 
 namespace Dravencms\FrontModule\Components\Gallery\Gallery\Detail;
 
-use Dravencms\Components\BaseControl;
+use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Salamek\Cms\ICmsActionOption;
 

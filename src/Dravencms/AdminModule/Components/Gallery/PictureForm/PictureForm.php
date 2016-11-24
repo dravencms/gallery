@@ -20,7 +20,8 @@
 
 namespace Dravencms\AdminModule\Components\Gallery\PictureForm;
 
-use Dravencms\Components\BaseFormFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseForm\BaseFormFactory;
 
 use Dravencms\File\File;
 use Dravencms\Model\File\Repository\StructureFileRepository;
@@ -31,7 +32,6 @@ use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 
 /**
@@ -39,7 +39,7 @@ use Nette\Application\UI\Form;
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class PictureForm extends Control
+class PictureForm extends BaseControl
 {
     /** @var BaseFormFactory */
     private $baseFormFactory;

@@ -21,13 +21,13 @@
 
 namespace Dravencms\AdminModule\Components\Gallery\PictureGrid;
 
-use Dravencms\Components\BaseGridFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
 use Dravencms\Model\Gallery\Repository\PictureRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
 use Nette\Utils\Html;
 use Salamek\Files\ImagePipe;
 
@@ -36,7 +36,7 @@ use Salamek\Files\ImagePipe;
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class PictureGrid extends Control
+class PictureGrid extends BaseControl
 {
     /** @var BaseGridFactory */
     private $baseGridFactory;

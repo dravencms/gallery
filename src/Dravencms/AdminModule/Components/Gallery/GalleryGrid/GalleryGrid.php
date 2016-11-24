@@ -21,19 +21,19 @@
 
 namespace Dravencms\AdminModule\Components\Gallery\GalleryGrid;
 
-use Dravencms\Components\BaseGridFactory;
+use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Components\BaseGrid\BaseGridFactory;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Control;
 
 /**
  * Description of GalleryGrid
  *
  * @author Adam Schubert <adam.schubert@sg1-game.net>
  */
-class GalleryGrid extends Control
+class GalleryGrid extends BaseControl
 {
 
     /** @var BaseGridFactory */
