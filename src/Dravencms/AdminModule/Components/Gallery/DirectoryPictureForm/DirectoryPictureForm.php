@@ -21,12 +21,12 @@
 namespace Dravencms\AdminModule\Components\Gallery\DirectoryPictureForm;
 
 use Dravencms\Components\BaseFormFactory;
-use App\Model\File\Repository\StructureFileRepository;
-use App\Model\File\Repository\StructureRepository;
+use Dravencms\Model\File\Repository\StructureFileRepository;
+use Dravencms\Model\File\Repository\StructureRepository;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
 use Dravencms\Model\Gallery\Repository\PictureRepository;
-use App\Model\Tag\Repository\TagRepository;
+use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;

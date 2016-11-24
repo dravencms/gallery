@@ -34,7 +34,7 @@
                 {/formContainer}
             </div>
         </div>
-        {include '../../../../../../../../../app/AdminModule/templates/File/File/fileSelector.latte', filetype => Salamek\Files\Models\IFile::TYPE_IMAGE, form => $form}
+        {include $fileSelectorPath, filetype => Salamek\Files\Models\IFile::TYPE_IMAGE, form => $form}
 
         <div class="row">
             <div class="col-sm-12">

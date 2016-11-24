@@ -1,8 +1,8 @@
 <?php
 namespace Dravencms\Model\Gallery\Entities;
 
-use App\Model\File\Entities\StructureFile;
-use App\Model\Tag\Entities\Tag;
+use Dravencms\Model\File\Entities\StructureFile;
+use Dravencms\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -66,7 +66,7 @@ class Picture extends Nette\Object
 
     /**
      * @var StructureFile
-     * @ORM\ManyToOne(targetEntity="\App\Model\File\Entities\StructureFile", inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFile", inversedBy="articles")
      * @ORM\JoinColumn(name="structure_file_id", referencedColumnName="id")
      */
     private $structureFile;
@@ -82,7 +82,7 @@ class Picture extends Nette\Object
     /**
      * @var \Doctrine\Common\Collections\Collection|Tag[]
      *
-     * @ORM\ManyToMany(targetEntity="\App\Model\Tag\Entities\Tag", inversedBy="galleryPictures")
+     * @ORM\ManyToMany(targetEntity="\Dravencms\Model\Tag\Entities\Tag", inversedBy="galleryPictures")
      * @ORM\JoinTable(
      *  name="picture_tag",
      *  joinColumns={

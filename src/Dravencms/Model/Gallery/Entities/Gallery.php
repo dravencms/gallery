@@ -1,8 +1,6 @@
 <?php
 namespace Dravencms\Model\Gallery\Entities;
 
-use App\Model\File\Entities\StructureFile;
-use App\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;

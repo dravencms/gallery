@@ -22,12 +22,13 @@ namespace Dravencms\AdminModule\Components\Gallery\PictureForm;
 
 use Dravencms\Components\BaseFormFactory;
 
-use App\Model\File\Repository\StructureFileRepository;
+use Dravencms\File\File;
+use Dravencms\Model\File\Repository\StructureFileRepository;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
 use Dravencms\Model\Gallery\Repository\PictureRepository;
-use App\Model\Locale\Repository\LocaleRepository;
-use App\Model\Tag\Repository\TagRepository;
+use Dravencms\Model\Locale\Repository\LocaleRepository;
+use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
@@ -61,6 +62,9 @@ class PictureForm extends Control
     /** @var Gallery */
     private $gallery;
 
+    /** @var File */
+    private $file;
+
     /** @var Picture|null */
     private $picture = null;
 
@@ -76,6 +80,7 @@ class PictureForm extends Control
      * @param StructureFileRepository $structureFileRepository
      * @param LocaleRepository $localeRepository
      * @param Gallery $gallery
+     * @param File $file
      * @param Picture|null $picture
      */
     public function __construct(
@@ -86,6 +91,7 @@ class PictureForm extends Control
         StructureFileRepository $structureFileRepository,
         LocaleRepository $localeRepository,
         Gallery $gallery,
+        File $file,
         Picture $picture = null
     ) {
         parent::__construct();
@@ -99,6 +105,7 @@ class PictureForm extends Control
         $this->tagRepository = $tagRepository;
         $this->structureFileRepository = $structureFileRepository;
         $this->localeRepository = $localeRepository;
+        $this->file = $file;
 
 
         if ($this->picture) {
@@ -227,6 +234,7 @@ class PictureForm extends Control
     public function render()
     {
         $template = $this->template;
+        $template->fileSelectorPath = $this->file->getFileSelectorPath();
         $template->activeLocales = $this->localeRepository->getActive();
         $template->setFile(__DIR__ . '/PictureForm.latte');
         $template->render();

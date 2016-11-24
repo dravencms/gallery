@@ -16,7 +16,7 @@ use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Model\Gallery\Repository\PictureRepository;
-use App\Model\Tag\Repository\TagRepository;
+use Dravencms\Model\Tag\Repository\TagRepository;
 
 /**
  * Description of GalleryPresenter
