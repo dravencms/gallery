@@ -37,12 +37,12 @@ class InstallCommand extends Command
 
             $entityManager->persist($aclResource);
 
-            $aclOperation = new AclOperation($aclResource, 'edit', 'Allows editation of gallery');
-            $entityManager->persist($aclOperation);
-            $aclOperation = new AclOperation($aclResource, 'delete', 'Allows deletion of gallery');
-            $entityManager->persist($aclOperation);
+            $aclOperationEdit = new AclOperation($aclResource, 'edit', 'Allows editation of gallery');
+            $entityManager->persist($aclOperationEdit);
+            $aclOperationDelete = new AclOperation($aclResource, 'delete', 'Allows deletion of gallery');
+            $entityManager->persist($aclOperationDelete);
 
-            $adminMenu = new Menu('Gallery', ':Admin:Gallery:Gallery', 'fa-picture-o', $aclOperation);
+            $adminMenu = new Menu('Gallery', ':Admin:Gallery:Gallery', 'fa-picture-o', $aclOperationEdit);
 
             $foundRoot = $adminMenuRepository->getOneByName('Site items');
 
