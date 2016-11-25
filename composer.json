@@ -1,6 +1,6 @@
 {
   "name": "dravencms/gallery",
-  "type": "library",
+  "type": "dravencms-package",
   "description": "Gallery module for dravencms",
   "keywords": [
     "dravencms",
@@ -24,6 +24,19 @@
   "autoload": {
     "psr-0": {
       "Dravencms\\": "src/"
+    }
+  },
+  "extra": {
+    "dravencms": {
+      "configuration": {
+        "extensions": {
+          "timeline": "Dravencms\\Gallery\\DI\\GalleryExtension"
+        }
+      },
+      "scripts": {
+        "post-install": "Dravencms\\Gallery\\Script\\PostInstall",
+        "pre-uninstall": "Dravencms\\Gallery\\Script\\PreUninstall"
+      }
     }
   }
 }
