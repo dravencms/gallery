@@ -30,7 +30,7 @@
     "dravencms": {
       "configuration": {
         "extensions": {
-          "timeline": "Dravencms\\Gallery\\DI\\GalleryExtension"
+          "gallery": "Dravencms\\Gallery\\DI\\GalleryExtension"
         }
       },
       "scripts": {
