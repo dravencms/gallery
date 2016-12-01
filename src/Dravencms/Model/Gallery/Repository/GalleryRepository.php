@@ -14,7 +14,7 @@ use Salamek\Cms\CmsActionOption;
 use Salamek\Cms\ICmsComponentRepository;
 use Salamek\Cms\Models\ILocale;
 
-class GalleryRepository implements ICmsComponentRepository
+class GalleryRepository
 {
     use TLocalizedRepository;
 
@@ -72,6 +72,14 @@ class GalleryRepository implements ICmsComponentRepository
     }
 
     /**
+     * @return Gallery[]
+     */
+    public function getActive()
+    {
+        return $this->galleryRepository->findBy(['isActive' => true]);
+    }
+
+    /**
      * @param $name
      * @param ILocale $locale
      * @param Gallery|null $galleryIgnore
@@ -106,54 +114,4 @@ class GalleryRepository implements ICmsComponentRepository
     {
         return $this->galleryRepository->findAll();
     }
-
-    /**
-     * @param string $componentAction
-     * @return CmsActionOption[]
-     */
-    public function getActionOptions($componentAction)
-    {
-        switch ($componentAction)
-        {
-            case 'Detail':
-            case 'Tag':
-                $return = [];
-                /** @var Gallery $carousel */
-                foreach ($this->galleryRepository->findBy(['isActive' => true]) AS $carousel) {
-                    $return[] = new CmsActionOption($carousel->getName(), ['id' => $carousel->getId()]);
-                }
-                break;
-
-            case 'Overview':
-                return null;
-                break;
-
-            default:
-                return false;
-                break;
-        }
-
-
-        return $return;
-    }
-
-    /**
-     * @param string $componentAction
-     * @param array $parameters
-     * @param ILocale $locale
-     * @return null|CmsActionOption
-     */
-    public function getActionOption($componentAction, array $parameters, ILocale $locale)
-    {
-        /** @var Gallery $found */
-        $found = $this->findTranslatedOneBy($this->galleryRepository, $locale, $parameters + ['isActive' => true]);
-
-        if ($found)
-        {
-            return new CmsActionOption($found->getName(), $parameters);
-        }
-
-        return null;
-    }
-
 }
