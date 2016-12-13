@@ -1,3 +1,7 @@
 - Dravencms\Model\Gallery\Repository\GalleryRepository
 - Dravencms\Model\Gallery\Repository\GalleryCmsRepository
 - Dravencms\Model\Gallery\Repository\PictureRepository
+
+- Dravencms\Model\Gallery\Fixtures\AclOperationFixtures
+- Dravencms\Model\Gallery\Fixtures\AclResourceFixtures
+- Dravencms\Model\Gallery\Fixtures\AdminMenuFixtures
