@@ -66,7 +66,7 @@ class Picture extends Nette\Object
 
     /**
      * @var StructureFile
-     * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFile", inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFile")
      * @ORM\JoinColumn(name="structure_file_id", referencedColumnName="id")
      */
     private $structureFile;
