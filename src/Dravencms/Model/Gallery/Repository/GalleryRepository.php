@@ -5,19 +5,12 @@
 
 namespace Dravencms\Model\Gallery\Repository;
 
-use Dravencms\Locale\TLocalizedRepository;
 use Dravencms\Model\Gallery\Entities\Gallery;
-use Gedmo\Translatable\TranslatableListener;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Salamek\Cms\CmsActionOption;
-use Salamek\Cms\ICmsComponentRepository;
-use Salamek\Cms\Models\ILocale;
 
 class GalleryRepository
 {
-    use TLocalizedRepository;
-
     /** @var \Kdyby\Doctrine\EntityRepository */
     private $galleryRepository;
 
@@ -80,19 +73,18 @@ class GalleryRepository
     }
 
     /**
-     * @param $name
-     * @param ILocale $locale
+     * @param $identifier
      * @param Gallery|null $galleryIgnore
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, ILocale $locale, Gallery $galleryIgnore = null)
+    public function isIdentifierFree($identifier, Gallery $galleryIgnore = null)
     {
         $qb = $this->galleryRepository->createQueryBuilder('g')
             ->select('g')
-            ->where('g.name = :name')
+            ->where('g.identifier = :identifier')
             ->setParameters([
-                'name' => $name
+                'identifier' => $identifier
             ]);
 
         if ($galleryIgnore)
@@ -102,9 +94,16 @@ class GalleryRepository
         }
 
         $query = $qb->getQuery();
-        $query->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale->getLanguageCode());
-        
         return (is_null($query->getOneOrNullResult()));
+    }
+
+    /**
+     * @param array $parameters
+     * @return Gallery|null
+     */
+    public function getOneByParameters(array $parameters)
+    {
+        return $this->galleryRepository->findOneBy($parameters);
     }
 
     /**

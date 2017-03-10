@@ -23,6 +23,7 @@ namespace Dravencms\AdminModule\Components\Gallery\GalleryGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
@@ -45,8 +46,8 @@ class GalleryGrid extends BaseControl
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var LocaleRepository */
-    private $localeRepository;
+    /** @var CurrentLocale */
+    private $currentLocale;
 
     /**
      * @var array
@@ -58,21 +59,22 @@ class GalleryGrid extends BaseControl
      * @param GalleryRepository $galleryRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
+     * @param CurrentLocale $currentLocale
      */
-    public function __construct(GalleryRepository $galleryRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager, LocaleRepository $localeRepository)
+    public function __construct(GalleryRepository $galleryRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager, CurrentLocale $currentLocale)
     {
         parent::__construct();
 
         $this->baseGridFactory = $baseGridFactory;
         $this->galleryRepository = $galleryRepository;
         $this->entityManager = $entityManager;
-        $this->localeRepository = $localeRepository;
+        $this->currentLocale = $currentLocale;
     }
 
 
     /**
      * @param $name
-     * @return \Dravencms\Components\BaseGrid
+     * @return \Dravencms\Components\BaseGrid\BaseGrid
      */
     public function createComponentGrid($name)
     {
@@ -81,11 +83,11 @@ class GalleryGrid extends BaseControl
         $grid->setModel($this->galleryRepository->getGalleryQueryBuilder());
 
         $grid->setDefaultSort(['position' => 'ASC']);
-        $grid->addColumnText('name', 'Name')
+        $grid->addColumnText('identifier', 'Identifier')
             ->setFilterText()
             ->setSuggestion();
 
-        $grid->addColumnDate('updatedAt', 'Last edit', $this->localeRepository->getLocalizedDateTimeFormat())
+        $grid->addColumnDate('updatedAt', 'Last edit', $this->currentLocale->getDateTimeFormat())
             ->setSortable()
             ->setFilterDate();
         $grid->getColumn('updatedAt')->cellPrototype->class[] = 'center';
@@ -121,7 +123,7 @@ class GalleryGrid extends BaseControl
                 })
                 ->setIcon('trash-o')
                 ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat město %s ?', $row->name];
+                    return ['Opravdu chcete smazat město %s ?', $row->getIdentifier()];
                 });
 
 

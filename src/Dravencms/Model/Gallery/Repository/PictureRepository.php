@@ -7,10 +7,8 @@ namespace Dravencms\Model\Gallery\Repository;
 
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
-use Gedmo\Translatable\TranslatableListener;
 use Kdyby\Doctrine\EntityManager;
 use Nette;
-use Salamek\Cms\Models\ILocale;
 
 class PictureRepository
 {
@@ -62,21 +60,20 @@ class PictureRepository
     }
 
     /**
-     * @param $name
-     * @param ILocale $locale,
+     * @param $identifier
      * @param Gallery $gallery
      * @param Picture|null $pictureIgnore
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isNameFree($name, ILocale $locale, Gallery $gallery, Picture $pictureIgnore = null)
+    public function isIdentifierFree($identifier, Gallery $gallery, Picture $pictureIgnore = null)
     {
         $qb = $this->pictureRepository->createQueryBuilder('p')
             ->select('p')
-            ->where('p.name = :name')
+            ->where('p.identifier = :identifier')
             ->andWhere('p.gallery = :gallery')
             ->setParameters([
-                'name' => $name,
+                'identifier' => $identifier,
                 'gallery' => $gallery
             ]);
 
@@ -87,8 +84,6 @@ class PictureRepository
         }
 
         $query = $qb->getQuery();
-
-        $query->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, $locale->getLanguageCode());
 
         return (is_null($query->getOneOrNullResult()));
     }

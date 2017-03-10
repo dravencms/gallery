@@ -27,7 +27,9 @@ use Dravencms\File\File;
 use Dravencms\Model\File\Repository\StructureFileRepository;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
+use Dravencms\Model\Gallery\Entities\PictureTranslation;
 use Dravencms\Model\Gallery\Repository\PictureRepository;
+use Dravencms\Model\Gallery\Repository\PictureTranslationRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -59,6 +61,9 @@ class PictureForm extends BaseControl
     /** @var LocaleRepository */
     private $localeRepository;
 
+    /** @var PictureTranslationRepository */
+    private $pictureTranslationRepository;
+
     /** @var Gallery */
     private $gallery;
 
@@ -76,6 +81,7 @@ class PictureForm extends BaseControl
      * @param BaseFormFactory $baseFormFactory
      * @param EntityManager $entityManager
      * @param PictureRepository $pictureRepository
+     * @param PictureTranslationRepository $pictureTranslationRepository
      * @param TagRepository $tagRepository
      * @param StructureFileRepository $structureFileRepository
      * @param LocaleRepository $localeRepository
@@ -87,6 +93,7 @@ class PictureForm extends BaseControl
         BaseFormFactory $baseFormFactory,
         EntityManager $entityManager,
         PictureRepository $pictureRepository,
+        PictureTranslationRepository $pictureTranslationRepository,
         TagRepository $tagRepository,
         StructureFileRepository $structureFileRepository,
         LocaleRepository $localeRepository,
@@ -100,6 +107,7 @@ class PictureForm extends BaseControl
         $this->picture = $picture;
 
         $this->baseFormFactory = $baseFormFactory;
+        $this->pictureTranslationRepository = $pictureTranslationRepository;
         $this->entityManager = $entityManager;
         $this->pictureRepository = $pictureRepository;
         $this->tagRepository = $tagRepository;
@@ -117,8 +125,6 @@ class PictureForm extends BaseControl
             }
 
             $defaults = [
-                /*'name' => $this->picture->getName(),
-                'description' => $this->picture->getDescription(),*/
                 'position' => $this->picture->getPosition(),
                 'isActive' => $this->picture->isActive(),
                 'isPrimary' => $this->picture->isPrimary(),
@@ -126,13 +132,10 @@ class PictureForm extends BaseControl
                 'tags' => $tags
             ];
 
-            $repository = $this->entityManager->getRepository('Gedmo\Translatable\Entity\Translation');
-            $defaults += $repository->findTranslations($this->picture);
-
-            $defaultLocale = $this->localeRepository->getDefault();
-            if ($defaultLocale) {
-                $defaults[$defaultLocale->getLanguageCode()]['name'] = $this->picture->getName();
-                $defaults[$defaultLocale->getLanguageCode()]['position'] = $this->picture->getDescription();
+            foreach ($this->picture->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+                $defaults[$translation->getLocale()->getLanguageCode()]['description'] = $translation->getDescription();
             }
 
         }
@@ -159,6 +162,9 @@ class PictureForm extends BaseControl
             $container->addTextArea('description');
         }
 
+        $form->addText('identifier')
+            ->setRequired('Please enter picture identifier.');
+
 
         $form->addText('structureFile')
             ->setType('number')
@@ -184,8 +190,12 @@ class PictureForm extends BaseControl
     {
         $values = $form->getValues();
 
+        if (!$this->pictureRepository->isIdentifierFree($values->identifier, $this->gallery, $this->picture)) {
+            $form->addError('Tento identifier je již zabrán.');
+        }
+
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            if (!$this->pictureRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->gallery, $this->picture)) {
+            if (!$this->pictureTranslationRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->gallery, $this->picture)) {
                 $form->addError('Tento název je již zabrán.');
             }
         }
@@ -204,26 +214,39 @@ class PictureForm extends BaseControl
 
         if ($this->picture) {
             $picture = $this->picture;
-            //$picture->setName($values->name);
-            //$picture->setDescription($values->description);
+            $picture->setIdentifier($values->identifier);
             $picture->setIsActive($values->isActive);
             $picture->setIsPrimary($values->isPrimary);
             $picture->setPosition($values->position);
             $picture->setStructureFile($structureFile);
         } else {
-            $defaultLocale = $this->localeRepository->getDefault();
-            $picture = new Picture($this->gallery, $structureFile, $values->{$defaultLocale->getLanguageCode()}->name, $values->{$defaultLocale->getLanguageCode()}->description, $values->isActive, $values->isPrimary);
+            $picture = new Picture($this->gallery, $structureFile, $values->identifier, $values->isActive, $values->isPrimary);
         }
         $picture->setTags($tags);
 
-        $repository = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
-
-        foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            $repository->translate($picture, 'name', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->name)
-                ->translate($picture, 'description', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->description);
-        }
-
         $this->entityManager->persist($picture);
+
+        $this->entityManager->flush();
+
+        
+        foreach ($this->localeRepository->getActive() AS $activeLocale) {
+            if ($pictureTranslation = $this->pictureTranslationRepository->getTranslation($picture, $activeLocale))
+            {
+                $pictureTranslation->setName($values->{$activeLocale->getLanguageCode()}->name);
+                $pictureTranslation->setDescription($values->{$activeLocale->getLanguageCode()}->description);
+            }
+            else
+            {
+                $pictureTranslation = new PictureTranslation(
+                    $picture,
+                    $activeLocale,
+                    $values->{$activeLocale->getLanguageCode()}->name,
+                    $values->{$activeLocale->getLanguageCode()}->description
+                );
+            }
+
+            $this->entityManager->persist($pictureTranslation);
+        }
 
         $this->entityManager->flush();
 

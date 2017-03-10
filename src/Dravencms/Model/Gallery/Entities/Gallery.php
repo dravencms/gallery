@@ -24,17 +24,9 @@ class Gallery extends Nette\Object
 
     /**
      * @var string
-     * @Gedmo\Translatable
      * @ORM\Column(type="string",length=255,nullable=false,unique=true)
      */
-    private $name;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="text",nullable=false)
-     */
-    private $description;
+    private $identifier;
 
     /**
      * @var boolean
@@ -62,62 +54,41 @@ class Gallery extends Nette\Object
     private $position;
 
     /**
-     * @Gedmo\Locale
-     * Used locale to override Translation listener`s locale
-     * this is not a mapped field of entity metadata, just a simple property
-     * and it is not necessary because globally locale can be set in listener
-     */
-    private $locale;
-
-    /**
      * @var ArrayCollection|Picture[]
      * @ORM\OneToMany(targetEntity="Picture", mappedBy="gallery",cascade={"persist"})
      */
     private $pictures;
 
+    /**
+     * @var ArrayCollection|GalleryTranslation[]
+     * @ORM\OneToMany(targetEntity="GalleryTranslation", mappedBy="gallery",cascade={"persist", "remove"})
+     */
+    private $translations;
 
     /**
      * Gallery constructor.
-     * @param string $name
-     * @param string $description
+     * @param $identifier
      * @param bool $isActive
      * @param bool $isShowName
      * @param bool $isInOverview
      */
-    public function __construct($name, $description, $isActive = true, $isShowName = true, $isInOverview = true)
+    public function __construct($identifier, $isActive = true, $isShowName = true, $isInOverview = true)
     {
-        $this->name = $name;
-        $this->description = $description;
+        $this->identifier = $identifier;
         $this->isActive = $isActive;
         $this->isShowName = $isShowName;
         $this->isInOverview = $isInOverview;
 
         $this->pictures = new ArrayCollection();
-    }
-
-
-    /**
-     * @param $locale
-     */
-    public function setTranslatableLocale($locale)
-    {
-        $this->locale = $locale;
+        $this->translations = new ArrayCollection();
     }
 
     /**
-     * @param string $name
+     * @param string $identifier
      */
-    public function setName($name)
+    public function setIdentifier($identifier)
     {
-        $this->name = $name;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
+        $this->identifier = $identifier;
     }
 
     /**
@@ -153,14 +124,6 @@ class Gallery extends Nette\Object
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * @return boolean
      */
     public function isActive()
@@ -193,14 +156,6 @@ class Gallery extends Nette\Object
     }
 
     /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
      * @return Picture[]|ArrayCollection
      */
     public function getPictures()
@@ -208,6 +163,25 @@ class Gallery extends Nette\Object
         return $this->pictures;
     }
 
+    /**
+     * @return ArrayCollection|GalleryTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+    
+    /**
+     * @return ArrayCollection|\Doctrine\Common\Collections\Collection
+     */
     public function getPrimaryPicture()
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq("isPrimary", true));

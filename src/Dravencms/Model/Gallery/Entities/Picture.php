@@ -25,17 +25,9 @@ class Picture extends Nette\Object
 
     /**
      * @var string
-     * @Gedmo\Translatable
      * @ORM\Column(type="string",length=255,nullable=false,unique=true)
      */
-    private $name;
-
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @ORM\Column(type="text",nullable=false)
-     */
-    private $description;
+    private $identifier;
 
     /**
      * @var integer
@@ -57,14 +49,6 @@ class Picture extends Nette\Object
     private $isPrimary;
 
     /**
-     * @Gedmo\Locale
-     * Used locale to override Translation listener`s locale
-     * this is not a mapped field of entity metadata, just a simple property
-     * and it is not necessary because globally locale can be set in listener
-     */
-    private $locale;
-
-    /**
      * @var StructureFile
      * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFile")
      * @ORM\JoinColumn(name="structure_file_id", referencedColumnName="id")
@@ -82,7 +66,7 @@ class Picture extends Nette\Object
     /**
      * @var \Doctrine\Common\Collections\Collection|Tag[]
      *
-     * @ORM\ManyToMany(targetEntity="\Dravencms\Model\Tag\Entities\Tag", inversedBy="galleryPictures")
+     * @ORM\ManyToMany(targetEntity="\Dravencms\Model\Tag\Entities\Tag")
      * @ORM\JoinTable(
      *  name="picture_tag",
      *  joinColumns={
@@ -96,50 +80,37 @@ class Picture extends Nette\Object
     private $tags;
 
     /**
+     * @var ArrayCollection|PictureTranslation[]
+     * @ORM\OneToMany(targetEntity="PictureTranslation", mappedBy="picture",cascade={"persist", "remove"})
+     */
+    private $translations;
+
+    /**
      * Picture constructor.
      * @param Gallery $gallery
      * @param StructureFile $structureFile
-     * @param $name
-     * @param $description
+     * @param $identifier
      * @param bool $isActive
      * @param bool $isPrimary
      */
-    public function __construct(Gallery $gallery, StructureFile $structureFile, $name, $description, $isActive = true, $isPrimary = false)
+    public function __construct(Gallery $gallery, StructureFile $structureFile, $identifier, $isActive = true, $isPrimary = false)
     {
+        $this->identifier = $identifier;
         $this->gallery = $gallery;
-        $this->name = $name;
-        $this->description = $description;
         $this->isActive = $isActive;
         $this->isPrimary = $isPrimary;
         $this->structureFile = $structureFile;
 
         $this->tags = new ArrayCollection();
-    }
-
-
-    /**
-     * @param $locale
-     */
-    public function setTranslatableLocale($locale)
-    {
-        $this->locale = $locale;
+        $this->translations = new ArrayCollection();
     }
 
     /**
-     * @param string $name
+     * @param string $identifier
      */
-    public function setName($name)
+    public function setIdentifier($identifier)
     {
-        $this->name = $name;
-    }
-
-
-    /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
+        $this->identifier = $identifier;
     }
 
     /**
@@ -226,22 +197,6 @@ class Picture extends Nette\Object
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
      * @return boolean
      */
     public function isActive()
@@ -274,7 +229,7 @@ class Picture extends Nette\Object
     }
 
     /**
-     * @return \App\Model\Tag\Entities\Tag[]|\Doctrine\Common\Collections\Collection
+     * @return ArrayCollection|\Doctrine\Common\Collections\Collection|\Dravencms\Model\Tag\Entities\Tag[]
      */
     public function getTags()
     {
@@ -287,6 +242,22 @@ class Picture extends Nette\Object
     public function getGallery()
     {
         return $this->gallery;
+    }
+
+    /**
+     * @return ArrayCollection|PictureTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 }
 

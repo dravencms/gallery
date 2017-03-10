@@ -23,7 +23,9 @@ namespace Dravencms\AdminModule\Components\Gallery\GalleryForm;
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Model\Gallery\Entities\Gallery;
+use Dravencms\Model\Gallery\Entities\GalleryTranslation;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
+use Dravencms\Model\Gallery\Repository\GalleryTranslationRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Form;
@@ -44,6 +46,9 @@ class GalleryForm extends BaseControl
     /** @var GalleryRepository */
     private $galleryRepository;
 
+    /** @var GalleryTranslationRepository */
+    private $galleryTranslationRepository;
+
     /** @var LocaleRepository */
     private $localeRepository;
 
@@ -58,6 +63,7 @@ class GalleryForm extends BaseControl
      * @param BaseFormFactory $baseFormFactory
      * @param EntityManager $entityManager
      * @param GalleryRepository $galleryRepository
+     * @param GalleryTranslationRepository $galleryTranslationRepository
      * @param LocaleRepository $localeRepository
      * @param Gallery|null $gallery
      */
@@ -65,6 +71,7 @@ class GalleryForm extends BaseControl
         BaseFormFactory $baseFormFactory,
         EntityManager $entityManager,
         GalleryRepository $galleryRepository,
+        GalleryTranslationRepository $galleryTranslationRepository,
         LocaleRepository $localeRepository,
         Gallery $gallery = null
     ) {
@@ -75,26 +82,23 @@ class GalleryForm extends BaseControl
         $this->baseFormFactory = $baseFormFactory;
         $this->entityManager = $entityManager;
         $this->galleryRepository = $galleryRepository;
+        $this->galleryTranslationRepository = $galleryTranslationRepository;
         $this->localeRepository = $localeRepository;
 
 
         if ($this->gallery) {
             $defaults = [
-                /*'name' => $this->gallery->getName(),
-                'description' => $this->gallery->getDescription(),*/
                 'position' => $this->gallery->getPosition(),
+                'identifier' => $this->gallery->getIdentifier(),
                 'isActive' => $this->gallery->isActive(),
                 'isInOverview' => $this->gallery->isInOverview(),
                 'isShowName' => $this->gallery->isShowName(),
             ];
 
-            $repository = $this->entityManager->getRepository('Gedmo\Translatable\Entity\Translation');
-            $defaults += $repository->findTranslations($this->gallery);
-
-            $defaultLocale = $this->localeRepository->getDefault();
-            if ($defaultLocale) {
-                $defaults[$defaultLocale->getLanguageCode()]['name'] = $this->gallery->getName();
-                $defaults[$defaultLocale->getLanguageCode()]['position'] = $this->gallery->getDescription();
+            foreach ($this->gallery->getTranslations() AS $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+                $defaults[$translation->getLocale()->getLanguageCode()]['description'] = $translation->getDescription();
             }
         }
         else{
@@ -121,6 +125,9 @@ class GalleryForm extends BaseControl
             $container->addTextArea('description');
         }
 
+        $form->addText('identifier')
+            ->setRequired('Please enter identifier');
+
         $form->addText('position')
             ->setDisabled(is_null($this->gallery));
 
@@ -140,8 +147,13 @@ class GalleryForm extends BaseControl
     public function editFormValidate(Form $form)
     {
         $values = $form->getValues();
+
+        if (!$this->galleryRepository->isIdentifierFree($values->identifier, $this->gallery)) {
+            $form->addError('Tento identifier je již zabrán.');
+        }
+
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            if (!$this->galleryRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->gallery)) {
+            if (!$this->galleryTranslationRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->gallery)) {
                 $form->addError('Tento název je již zabrán.');
             }
         }
@@ -157,28 +169,43 @@ class GalleryForm extends BaseControl
 
         if ($this->gallery) {
             $gallery = $this->gallery;
-            //$gallery->setName($values->name);
-            //$gallery->setDescription($values->description);
+            $gallery->setIdentifier($values->identifier);
             $gallery->setIsActive($values->isActive);
             $gallery->setIsInOverview($values->isInOverview);
             $gallery->setIsShowName($values->isShowName);
             $gallery->setPosition($values->position);
         } else {
-            $defaultLocale = $this->localeRepository->getDefault();
             $gallery = new Gallery(
-                $values->{$defaultLocale->getLanguageCode()}->name,
-                $values->{$defaultLocale->getLanguageCode()}->description,
-                $values->isActive, $values->isShowName, $values->isInOverview);
-        }
-
-        $repository = $this->entityManager->getRepository('Gedmo\\Translatable\\Entity\\Translation');
-
-        foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            $repository->translate($gallery, 'name', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->name)
-                ->translate($gallery, 'description', $activeLocale->getLanguageCode(), $values->{$activeLocale->getLanguageCode()}->description);
+                $values->identifier,
+                $values->isActive,
+                $values->isShowName,
+                $values->isInOverview
+            );
         }
 
         $this->entityManager->persist($gallery);
+
+        $this->entityManager->flush();
+
+
+        foreach ($this->localeRepository->getActive() AS $activeLocale) {
+            if ($galleryTranslation = $this->galleryTranslationRepository->getTranslation($gallery, $activeLocale))
+            {
+                $galleryTranslation->setName($values->{$activeLocale->getLanguageCode()}->name);
+                $galleryTranslation->setDescription($values->{$activeLocale->getLanguageCode()}->description);
+            }
+            else
+            {
+                $galleryTranslation = new GalleryTranslation(
+                    $gallery,
+                    $activeLocale,
+                    $values->{$activeLocale->getLanguageCode()}->name,
+                    $values->{$activeLocale->getLanguageCode()}->description
+                );
+            }
+
+            $this->entityManager->persist($galleryTranslation);
+        }
 
         $this->entityManager->flush();
 

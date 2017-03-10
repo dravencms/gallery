@@ -9,7 +9,6 @@ use Dravencms\Model\Gallery\Entities\Gallery;
 use Nette;
 use Salamek\Cms\CmsActionOption;
 use Salamek\Cms\ICmsComponentRepository;
-use Salamek\Cms\Models\ILocale;
 
 class GalleryCmsRepository implements ICmsComponentRepository
 {
@@ -33,7 +32,7 @@ class GalleryCmsRepository implements ICmsComponentRepository
                 $return = [];
                 /** @var Gallery $carousel */
                 foreach ($this->galleryRepository->getActive() AS $carousel) {
-                    $return[] = new CmsActionOption($carousel->getName(), ['id' => $carousel->getId()]);
+                    $return[] = new CmsActionOption($carousel->getIdentifier(), ['id' => $carousel->getId()]);
                 }
                 break;
 
@@ -53,16 +52,15 @@ class GalleryCmsRepository implements ICmsComponentRepository
     /**
      * @param string $componentAction
      * @param array $parameters
-     * @param ILocale $locale
      * @return null|CmsActionOption
      */
-    public function getActionOption($componentAction, array $parameters, ILocale $locale)
+    public function getActionOption($componentAction, array $parameters)
     {
         /** @var Gallery $found */
-        $found = $this->galleryRepository->findTranslatedOneBy($this->galleryRepository, $locale, $parameters + ['isActive' => true]);
+        $found = $this->galleryRepository->getOneByParameters($parameters + ['isActive' => true]);
 
         if ($found) {
-            return new CmsActionOption($found->getName(), $parameters);
+            return new CmsActionOption($found->getIdentifier(), $parameters);
         }
 
         return null;

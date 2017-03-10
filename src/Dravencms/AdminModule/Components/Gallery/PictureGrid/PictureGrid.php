@@ -23,6 +23,7 @@ namespace Dravencms\AdminModule\Components\Gallery\PictureGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
 use Dravencms\Model\Gallery\Repository\PictureRepository;
@@ -47,8 +48,8 @@ class PictureGrid extends BaseControl
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var LocaleRepository */
-    private $localeRepository;
+    /** @var CurrentLocale */
+    private $currentLocale;
 
     /** @var ImagePipe */
     private $imagePipe;
@@ -67,16 +68,17 @@ class PictureGrid extends BaseControl
      * @param PictureRepository $pictureRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
-     * @param LocaleRepository $localeRepository
+     * @param CurrentLocale $currentLocale
+     * @param ImagePipe $imagePipe
      */
-    public function __construct(Gallery $gallery, PictureRepository $pictureRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager, LocaleRepository $localeRepository, ImagePipe $imagePipe)
+    public function __construct(Gallery $gallery, PictureRepository $pictureRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager, CurrentLocale $currentLocale, ImagePipe $imagePipe)
     {
         parent::__construct();
 
         $this->baseGridFactory = $baseGridFactory;
         $this->pictureRepository = $pictureRepository;
         $this->entityManager = $entityManager;
-        $this->localeRepository = $localeRepository;
+        $this->currentLocale = $currentLocale;
         $this->imagePipe = $imagePipe;
         $this->gallery = $gallery;
     }
@@ -84,7 +86,7 @@ class PictureGrid extends BaseControl
 
     /**
      * @param $name
-     * @return \Dravencms\Components\BaseGrid
+     * @return \Dravencms\Components\BaseGrid\BaseGrid
      */
     public function createComponentGrid($name)
     {
@@ -93,7 +95,7 @@ class PictureGrid extends BaseControl
         $grid->setModel($this->pictureRepository->getPictureQueryBuilder($this->gallery));
 
         $grid->setDefaultSort(['position' => 'ASC']);
-        $grid->addColumnText('name', 'Name')
+        $grid->addColumnText('identifier', 'Identifier')
             ->setCustomRender(function ($row) use($grid){
                 /** @var Picture $row */
                 if ($haveImage = $row->getStructureFile()) {
@@ -110,14 +112,14 @@ class PictureGrid extends BaseControl
                     $el = '';
                 }
 
-                return $el . Html::el('br') . $img . Html::el('br') . $row->getName();
+                return $el . Html::el('br') . $img . Html::el('br') . $row->getIdentifier();
             })
             ->setFilterText()
             ->setSuggestion();
 
-        $grid->getColumn('name')->cellPrototype->class[] = 'center';
+        $grid->getColumn('identifier')->cellPrototype->class[] = 'center';
 
-        $grid->addColumnDate('updatedAt', 'Last edit', $this->localeRepository->getLocalizedDateTimeFormat())
+        $grid->addColumnDate('updatedAt', 'Last edit', $this->currentLocale->getDateTimeFormat())
             ->setSortable()
             ->setFilterDate();
         $grid->getColumn('updatedAt')->cellPrototype->class[] = 'center';
@@ -145,7 +147,7 @@ class PictureGrid extends BaseControl
                 })
                 ->setIcon('trash-o')
                 ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat město %s ?', $row->name];
+                    return ['Opravdu chcete smazat město %s ?', $row->getIdentifier()];
                 });
 
 
