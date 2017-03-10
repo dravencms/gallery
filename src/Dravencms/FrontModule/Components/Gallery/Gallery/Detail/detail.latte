@@ -1,16 +1,18 @@
-{if $gallery}
+{if $galleryTranslation}
+    {var $gallery = $galleryTranslation->getGallery()}
     {if $gallery->isShowName()}
         <div class="page-row">
-            <h2>{$gallery->getName()}</h2>
-            <p>{$gallery->getDescription()|noescape}</p>
+            <h2>{$galleryTranslation->getName()}</h2>
+            <p>{$galleryTranslation->getDescription()|noescape}</p>
         </div>
     {/if}
 
 
     <div class="row page-row">
-        <div n:foreach="$gallery->getPictures() as $image" class="col-sm-6 col-xs-12 col-md-3">
-            <a  class="thumbnail text-center" href="{img $image->getStructureFile()->getFile(), 1024x}" title="{$image->getName()}" data-gallery>
-                <img class="img-responsive" n:img="$image->getStructureFile()->getFile(), 263x150, fit_exact" alt="{$image->getName()}" title="{$image->getName()}">
+        <div n:foreach="$pictureTranslations as $pictureTranslation" class="col-sm-6 col-xs-12 col-md-3">
+            {var $image = $pictureTranslation->getPicture()}
+            <a  class="thumbnail text-center" href="{img $image->getStructureFile()->getFile(), 1024x}" title="{$pictureTranslation->getName()}" data-gallery>
+                <img class="img-responsive" n:img="$image->getStructureFile()->getFile(), 263x150, fit_exact" alt="{$pictureTranslation->getName()}" title="{$pictureTranslation->getName()}">
             </a>
         </div>
 
@@ -39,10 +41,10 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left prev">
                             <i class="fa fa-chevron-left"></i>
-                            Předchozí
+                            {_"Previous"}
                         </button>
                         <button type="button" class="btn btn-primary next">
-                            Další
+                            {_"Next"}
                             <i class="fa fa-chevron-right"></i>
                         </button>
                     </div>
