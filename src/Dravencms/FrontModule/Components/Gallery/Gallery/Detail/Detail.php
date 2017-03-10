@@ -8,6 +8,7 @@ use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Model\Gallery\Repository\GalleryTranslationRepository;
 use Dravencms\Model\Gallery\Repository\PictureTranslationRepository;
 use Salamek\Cms\ICmsActionOption;
+use Salamek\Cms\ICmsComponent;
 
 /**
  * Homepage presenter.
@@ -29,6 +30,14 @@ class Detail extends BaseControl
     /** @var CurrentLocale */
     private $currentLocale;
 
+    /**
+     * Detail constructor.
+     * @param ICmsActionOption $cmsActionOption
+     * @param GalleryRepository $galleryRepository
+     * @param GalleryTranslationRepository $galleryTranslationRepository
+     * @param PictureTranslationRepository $pictureTranslationRepository
+     * @param CurrentLocale $currentLocale
+     */
     public function __construct(
         ICmsActionOption $cmsActionOption,
         GalleryRepository $galleryRepository,
@@ -60,7 +69,7 @@ class Detail extends BaseControl
 
         $template->pictureTranslations = $pictureTranslations;
 
-        $template->setFile(__DIR__ . '/detail.latte');
+        $template->setFile($this->cmsActionOption->getTemplatePath(__DIR__.'/detail.latte'));
         $template->render();
     }
 }

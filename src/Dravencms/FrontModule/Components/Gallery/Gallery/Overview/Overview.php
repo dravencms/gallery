@@ -60,7 +60,7 @@ class Overview extends BaseControl
 
         $template->galleryTranslations = $galleryTranslations;
 
-        $template->setFile(__DIR__ . '/overview.latte');
+        $template->setFile($this->cmsActionOption->getTemplatePath(__DIR__.'/overview.latte'));
         $template->render();
     }
 }
