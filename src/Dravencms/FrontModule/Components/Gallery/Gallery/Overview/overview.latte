@@ -1,5 +1,6 @@
 <div class="row page-row">
-    <div n:foreach="$galleries as $gallery" class="col-md-6 col-sm-6 col-xs-12 text-center">
+    <div n:foreach="$galleryTranslations as $galleryTranslation" class="col-md-6 col-sm-6 col-xs-12 text-center">
+        {var $gallery = $galleryTranslation->getGallery()}
         <div class="album-cover">
             <a n:cmsLink="Gallery\Gallery\Detail, 'id' => $gallery->getId()">
                 {if $gallery->getPrimaryPicture()->count()}
@@ -9,11 +10,11 @@
                 {else}
                     {var $picture = null}
                 {/if}
-                <img class="img-responsive" n:img="$picture, '553x306', 'exact'" alt="{$gallery->getName()}">
+                <img class="img-responsive" n:img="$picture, '553x306', 'exact'" alt="{$galleryTranslation->getName()}">
             </a>
             <div class="desc">
-                <h4><small><a n:cmsLink="Gallery\Gallery\Detail, 'id' => $gallery->getId()">{$gallery->getName()}</a></small></h4>
-                <p>{$gallery->getDescription()|striptags|truncate:500,'...'|noescape}</p>
+                <h4><small><a n:cmsLink="Gallery\Gallery\Detail, 'id' => $gallery->getId()">{$galleryTranslation->getName()}</a></small></h4>
+                <p>{$galleryTranslation->getDescription()|striptags|truncate:500,'...'|noescape}</p>
             </div>
         </div>
     </div>

@@ -3,7 +3,9 @@
 namespace Dravencms\FrontModule\Components\Gallery\Gallery\Overview;
 
 use Dravencms\Components\BaseControl\BaseControl;
+use Dravencms\Locale\CurrentLocale;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
+use Dravencms\Model\Gallery\Repository\GalleryTranslationRepository;
 use Salamek\Cms\ICmsActionOption;
 
 /**
@@ -17,16 +19,31 @@ class Overview extends BaseControl
     /** @var GalleryRepository */
     private $galleryRepository;
 
+    /** @var GalleryTranslationRepository */
+    private $galleryTranslationRepository;
+
+    /** @var CurrentLocale */
+    private $currentLocale;
+
     /**
      * Overview constructor.
      * @param ICmsActionOption $cmsActionOption
      * @param GalleryRepository $galleryRepository
+     * @param GalleryTranslationRepository $galleryTranslationRepository
+     * @param CurrentLocale $currentLocale
      */
-    public function __construct(ICmsActionOption $cmsActionOption, GalleryRepository $galleryRepository)
+    public function __construct(
+        ICmsActionOption $cmsActionOption,
+        GalleryRepository $galleryRepository,
+        GalleryTranslationRepository $galleryTranslationRepository,
+        CurrentLocale $currentLocale
+    )
     {
         parent::__construct();
         $this->cmsActionOption = $cmsActionOption;
         $this->galleryRepository = $galleryRepository;
+        $this->galleryTranslationRepository = $galleryTranslationRepository;
+        $this->currentLocale = $currentLocale;
     }
 
 
@@ -35,7 +52,13 @@ class Overview extends BaseControl
         $template = $this->template;
         $galleries = $this->galleryRepository->getByInOverview();
 
-        $template->galleries = $galleries;
+        $galleryTranslations = [];
+        foreach ($galleries AS $gallery)
+        {
+            $galleryTranslations[] = $this->galleryTranslationRepository->getTranslation($gallery, $this->currentLocale);
+        }
+
+        $template->galleryTranslations = $galleryTranslations;
 
         $template->setFile(__DIR__ . '/overview.latte');
         $template->render();
