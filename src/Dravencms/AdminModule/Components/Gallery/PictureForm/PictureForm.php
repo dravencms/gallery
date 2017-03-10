@@ -24,7 +24,9 @@ use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
 
 use Dravencms\File\File;
+use Dravencms\Model\File\Entities\Structure;
 use Dravencms\Model\File\Repository\StructureFileRepository;
+use Dravencms\Model\File\Repository\StructureRepository;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
 use Dravencms\Model\Gallery\Entities\PictureTranslation;
@@ -35,6 +37,7 @@ use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Form;
+use Salamek\Files\FileStorage;
 
 /**
  * Description of PictureForm
@@ -64,11 +67,17 @@ class PictureForm extends BaseControl
     /** @var PictureTranslationRepository */
     private $pictureTranslationRepository;
 
+    /** @var StructureRepository */
+    private $structureRepository;
+
     /** @var Gallery */
     private $gallery;
 
     /** @var File */
     private $file;
+
+    /** @var FileStorage */
+    private $fileStorage;
 
     /** @var Picture|null */
     private $picture = null;
@@ -96,6 +105,8 @@ class PictureForm extends BaseControl
         PictureTranslationRepository $pictureTranslationRepository,
         TagRepository $tagRepository,
         StructureFileRepository $structureFileRepository,
+        StructureRepository $structureRepository,
+        FileStorage $fileStorage,
         LocaleRepository $localeRepository,
         Gallery $gallery,
         File $file,
@@ -113,6 +124,8 @@ class PictureForm extends BaseControl
         $this->tagRepository = $tagRepository;
         $this->structureFileRepository = $structureFileRepository;
         $this->localeRepository = $localeRepository;
+        $this->structureRepository = $structureRepository;
+        $this->fileStorage = $fileStorage;
         $this->file = $file;
 
 
@@ -167,8 +180,9 @@ class PictureForm extends BaseControl
 
 
         $form->addText('structureFile')
-            ->setType('number')
-            ->setRequired('Please select the photo.');
+            ->setType('number');
+
+        $form->addUpload('file');
 
         $form->addMultiSelect('tags', null, $this->tagRepository->getPairs());
         
@@ -210,7 +224,23 @@ class PictureForm extends BaseControl
         $values = $form->getValues();
 
         $tags = new ArrayCollection($this->tagRepository->getById($values->tags));
-        $structureFile = $this->structureFileRepository->getOneById($values->structureFile);
+
+        if ($values->structureFile) {
+            $structureFile = $this->structureFileRepository->getOneById($values->structureFile);
+        } else {
+            $structureFile = null;
+        }
+
+        $file = $values->file;
+        if ($file->isOk()) {
+            $structureName = 'Gallery';
+            if (!$structure = $this->structureRepository->getOneByName($structureName)) {
+                $structure = new Structure($structureName);
+                $this->entityManager->persist($structure);
+                $this->entityManager->flush();
+            }
+            $structureFile = $this->fileStorage->processFile($file, $structure);
+        }
 
         if ($this->picture) {
             $picture = $this->picture;
