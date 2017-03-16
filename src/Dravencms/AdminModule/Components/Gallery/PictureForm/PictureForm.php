@@ -139,6 +139,7 @@ class PictureForm extends BaseControl
 
             $defaults = [
                 'position' => $this->picture->getPosition(),
+                'identifier' => $this->picture->getIdentifier(),
                 'isActive' => $this->picture->isActive(),
                 'isPrimary' => $this->picture->isPrimary(),
                 'structureFile' => $this->picture->getStructureFile()->getId(),
