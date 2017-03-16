@@ -56,6 +56,7 @@ class Gallery extends Nette\Object
     /**
      * @var ArrayCollection|Picture[]
      * @ORM\OneToMany(targetEntity="Picture", mappedBy="gallery",cascade={"persist"})
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $pictures;
 
