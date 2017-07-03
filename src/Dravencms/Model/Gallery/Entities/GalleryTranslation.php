@@ -10,13 +10,14 @@ use Gedmo\Translatable\Translatable;
 use Gedmo\Sortable\Sortable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette;
 
 /**
  * Class GalleryTranslation
  * @package App\Model\Gallery\Entities
  * @ORM\Entity
- * @ORM\Table(name="galleryGalleryTranslation")
+ * @ORM\Table(name="galleryGalleryTranslation", uniqueConstraints={@UniqueConstraint(name="gallery_translation_name_unique", columns={"gallery_id", "locale_id", "name"})})
  */
 class GalleryTranslation extends Nette\Object
 {
@@ -25,7 +26,7 @@ class GalleryTranslation extends Nette\Object
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
+     * @ORM\Column(type="string",length=255,nullable=false)
      */
     private $name;
 
