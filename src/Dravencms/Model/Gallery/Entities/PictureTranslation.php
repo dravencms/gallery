@@ -12,12 +12,13 @@ use Gedmo\Sortable\Sortable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Nette;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Class PictureTranslation
  * @package App\Model\Gallery\Entities
  * @ORM\Entity
- * @ORM\Table(name="galleryPictureTranslation")
+ * @ORM\Table(name="galleryPictureTranslation", uniqueConstraints={@UniqueConstraint(name="picture_translation_name_unique", columns={"picture_id", "locale_id", "name"})})
  */
 class PictureTranslation extends Nette\Object
 {
@@ -26,7 +27,7 @@ class PictureTranslation extends Nette\Object
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
+     * @ORM\Column(type="string",length=255,nullable=false)
      */
     private $name;
 
