@@ -3,7 +3,7 @@
 namespace Dravencms\FrontModule\Components\Gallery\Gallery\Detail;
 
 use Dravencms\Components\BaseControl\BaseControl;
-use Dravencms\Locale\CurrentLocale;
+use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Model\Gallery\Repository\GalleryTranslationRepository;
 use Dravencms\Model\Gallery\Repository\PictureTranslationRepository;
@@ -27,7 +27,7 @@ class Detail extends BaseControl
     /** @var PictureTranslationRepository */
     private $pictureTranslationRepository;
 
-    /** @var CurrentLocale */
+    /** @var ILocale */
     private $currentLocale;
 
     /**
@@ -36,14 +36,14 @@ class Detail extends BaseControl
      * @param GalleryRepository $galleryRepository
      * @param GalleryTranslationRepository $galleryTranslationRepository
      * @param PictureTranslationRepository $pictureTranslationRepository
-     * @param CurrentLocale $currentLocale
+     * @param CurrentLocaleResolver $currentLocaleResolver
      */
     public function __construct(
         ICmsActionOption $cmsActionOption,
         GalleryRepository $galleryRepository,
         GalleryTranslationRepository $galleryTranslationRepository,
         PictureTranslationRepository $pictureTranslationRepository,
-        CurrentLocale $currentLocale
+        CurrentLocaleResolver $currentLocaleResolver
     )
     {
         parent::__construct();
@@ -51,7 +51,7 @@ class Detail extends BaseControl
         $this->galleryRepository = $galleryRepository;
         $this->galleryTranslationRepository = $galleryTranslationRepository;
         $this->pictureTranslationRepository = $pictureTranslationRepository;
-        $this->currentLocale = $currentLocale;
+        $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
     }
 
     public function render()

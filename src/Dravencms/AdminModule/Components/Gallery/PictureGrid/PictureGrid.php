@@ -23,7 +23,7 @@ namespace Dravencms\AdminModule\Components\Gallery\PictureGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
-use Dravencms\Locale\CurrentLocale;
+use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
 use Dravencms\Model\Gallery\Repository\PictureRepository;
@@ -68,17 +68,24 @@ class PictureGrid extends BaseControl
      * @param PictureRepository $pictureRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
-     * @param CurrentLocale $currentLocale
+     * @param CurrentLocaleResolver $currentLocaleResolver
      * @param ImagePipe $imagePipe
      */
-    public function __construct(Gallery $gallery, PictureRepository $pictureRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager, CurrentLocale $currentLocale, ImagePipe $imagePipe)
+    public function __construct(
+        Gallery $gallery,
+        PictureRepository $pictureRepository,
+        BaseGridFactory $baseGridFactory,
+        EntityManager $entityManager,
+        CurrentLocaleResolver $currentLocaleResolver,
+        ImagePipe $imagePipe
+    )
     {
         parent::__construct();
 
         $this->baseGridFactory = $baseGridFactory;
         $this->pictureRepository = $pictureRepository;
         $this->entityManager = $entityManager;
-        $this->currentLocale = $currentLocale;
+        $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
         $this->imagePipe = $imagePipe;
         $this->gallery = $gallery;
     }

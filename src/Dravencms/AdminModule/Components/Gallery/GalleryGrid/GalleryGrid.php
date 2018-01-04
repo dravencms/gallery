@@ -23,7 +23,7 @@ namespace Dravencms\AdminModule\Components\Gallery\GalleryGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
-use Dravencms\Locale\CurrentLocale;
+use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
@@ -46,7 +46,7 @@ class GalleryGrid extends BaseControl
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var CurrentLocale */
+    /** @var ILocale */
     private $currentLocale;
 
     /**
@@ -59,16 +59,21 @@ class GalleryGrid extends BaseControl
      * @param GalleryRepository $galleryRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
-     * @param CurrentLocale $currentLocale
+     * @param CurrentLocaleResolver $currentLocaleResolver
      */
-    public function __construct(GalleryRepository $galleryRepository, BaseGridFactory $baseGridFactory, EntityManager $entityManager, CurrentLocale $currentLocale)
+    public function __construct(
+        GalleryRepository $galleryRepository, 
+        BaseGridFactory $baseGridFactory, 
+        EntityManager $entityManager,
+        CurrentLocaleResolver $currentLocaleResolver
+    )
     {
         parent::__construct();
 
         $this->baseGridFactory = $baseGridFactory;
         $this->galleryRepository = $galleryRepository;
         $this->entityManager = $entityManager;
-        $this->currentLocale = $currentLocale;
+        $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
     }
 
 
