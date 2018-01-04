@@ -20,8 +20,9 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  * @ORM\Entity
  * @ORM\Table(name="galleryPictureTranslation", uniqueConstraints={@UniqueConstraint(name="picture_translation_name_unique", columns={"picture_id", "locale_id", "name"})})
  */
-class PictureTranslation extends Nette\Object
+class PictureTranslation
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 

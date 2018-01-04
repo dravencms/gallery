@@ -17,8 +17,9 @@ use Nette;
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  * @ORM\Table(name="galleryGallery")
  */
-class Gallery extends Nette\Object
+class Gallery
 {
+    use Nette\SmartObject;
     use Identifier;
     use TimestampableEntity;
 
