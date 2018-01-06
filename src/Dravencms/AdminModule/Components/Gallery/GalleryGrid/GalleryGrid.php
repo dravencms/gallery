@@ -23,6 +23,7 @@ namespace Dravencms\AdminModule\Components\Gallery\GalleryGrid;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseGrid\BaseGridFactory;
+use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
@@ -79,85 +80,84 @@ class GalleryGrid extends BaseControl
 
     /**
      * @param $name
-     * @return \Dravencms\Components\BaseGrid\BaseGrid
+     * @return Grid
+     * @throws \Ublaboo\DataGrid\Exception\DataGridColumnNotFoundException
      */
     public function createComponentGrid($name)
     {
+        /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
 
-        $grid->setModel($this->galleryRepository->getGalleryQueryBuilder());
+        $grid->setDataSource($this->galleryRepository->getGalleryQueryBuilder());
 
         $grid->setDefaultSort(['position' => 'ASC']);
         $grid->addColumnText('identifier', 'Identifier')
-            ->setFilterText()
-            ->setSuggestion();
+            ->setFilterText();
 
-        $grid->addColumnDate('updatedAt', 'Last edit', $this->currentLocale->getDateTimeFormat())
+        $grid->addColumnDateTime('updatedAt', 'Last edit')
+            ->setFormat($this->currentLocale->getDateTimeFormat())
+            ->setAlign('center')
             ->setSortable()
             ->setFilterDate();
-        $grid->getColumn('updatedAt')->cellPrototype->class[] = 'center';
 
         $grid->addColumnBoolean('isActive', 'Active');
 
         $grid->addColumnNumber('position', 'Position')
-            ->setFilterNumber()
-            ->setSuggestion();
-
-        $grid->getColumn('position')->cellPrototype->class[] = 'center';
+            ->setAlign('center')
+            ->setFilterRange();
 
         $grid->addColumnNumber('pictures', 'Pictures')
-            ->setCustomRender(function($row){
+            ->setAlign('center')
+            ->setRenderer(function($row){
                 /** @var Gallery $row */
                 return $row->getPictures()->count();
             });
 
-        $grid->getColumn('pictures')->cellPrototype->class[] = 'center';
+        if ($this->presenter->isAllowed('gallery', 'edit'))
+        {
+            $grid->addAction('pictures', 'Pictures')
+                ->setIcon('folder-open')
+                ->setTitle('Pictures')
+                ->setClass('btn btn-xs btn-default');
 
-        if ($this->presenter->isAllowed('gallery', 'edit')) {
-            $grid->addActionHref('pictures', 'Pictures')
-                ->setIcon('folder-open');
-
-            $grid->addActionHref('edit', 'Upravit')
-                ->setIcon('pencil');
+            $grid->addAction('edit', '')
+                ->setIcon('pencil')
+                ->setTitle('Upravit')
+                ->setClass('btn btn-xs btn-primary');
         }
 
-        if ($this->presenter->isAllowed('gallery', 'delete')) {
-            $grid->addActionHref('delete', 'Smazat', 'delete!')
-                ->setCustomHref(function($row){
-                    return $this->link('delete!', $row->getId());
-                })
-                ->setIcon('trash-o')
-                ->setConfirm(function ($row) {
-                    return ['Opravdu chcete smazat město %s ?', $row->getIdentifier()];
-                });
+        if ($this->presenter->isAllowed('gallery', 'delete'))
+        {
+            $grid->addAction('delete', '', 'delete!')
+                ->setIcon('trash')
+                ->setTitle('Smazat')
+                ->setClass('btn btn-xs btn-danger ajax')
+                ->setConfirm('Do you really want to delete row %s?', 'identifier');
 
-
-            $operations = ['delete' => 'Smazat'];
-            $grid->setOperation($operations, [$this, 'gridOperationsHandler'])
-                ->setConfirm('delete', 'Opravu chcete smazat %i locales ?');
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
         }
-        $grid->setExport();
+
+        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
+            ->setTitle('Csv export (filtered)');
+
+        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
+            ->setTitle('Csv export');
 
         return $grid;
     }
 
     /**
-     * @param $action
-     * @param $ids
+     * @param array $ids
      */
-    public function gridOperationsHandler($action, $ids)
+    public function gridGroupActionDelete(array $ids)
     {
-        switch ($action)
-        {
-            case 'delete':
-                $this->handleDelete($ids);
-                break;
-        }
+        $this->handleDelete($ids);
     }
 
     /**
      * @param $id
      * @throws \Exception
+     * @isAllowed(gallery, delete)
      */
     public function handleDelete($id)
     {
