@@ -111,7 +111,7 @@ class GalleryPresenter extends SecuredPresenter
     public function actionNewPictureFromDirectory($galleryId)
     {
         $this->gallery = $this->galleryRepository->getOneById($galleryId);
-        $this->template->h1 = 'New pictures from directory into gallery: '. $this->gallery->getName();
+        $this->template->h1 = 'New pictures from directory into gallery: '. $this->gallery->getIdentifier();
     }
 
     /**
