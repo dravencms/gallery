@@ -152,7 +152,7 @@ class DirectoryPictureForm extends BaseControl
         $structure = $this->structureRepository->getOneById($values->structure);
         foreach ($structure->getStructureFiles() AS $structureFile)
         {
-            $picture = new Picture($this->gallery, $structureFile, $structureFile->getId().'-'.$structureFile->getName(), '', $values->isActive, false);
+            $picture = new Picture($this->gallery, $structureFile, $structureFile->getId().'-'.$structureFile->getName(), $values->isActive, false);
             $picture->setTags($tags);
 
             $this->entityManager->persist($picture);
