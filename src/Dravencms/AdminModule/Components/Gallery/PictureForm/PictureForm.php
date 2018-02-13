@@ -170,8 +170,8 @@ class PictureForm extends BaseControl
             $container = $form->addContainer($activeLocale->getLanguageCode());
 
             $container->addText('name')
-                ->setRequired('Please enter gallery name.')
-                ->addRule(Form::MAX_LENGTH, 'Gallery name is too long.', 255);
+                ->setRequired('Please enter picture name.')
+                ->addRule(Form::MAX_LENGTH, 'Picture name is too long.', 255);
 
             $container->addTextArea('description');
         }
@@ -216,7 +216,7 @@ class PictureForm extends BaseControl
         }
 
         if (!$this->presenter->isAllowed('gallery', 'edit')) {
-            $form->addError('Nemáte oprávění editovat article.');
+            $form->addError('Nemáte oprávění editovat gallery.');
         }
     }
 
