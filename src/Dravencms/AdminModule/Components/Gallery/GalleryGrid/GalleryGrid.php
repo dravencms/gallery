@@ -94,6 +94,12 @@ class GalleryGrid extends BaseControl
         $grid->addColumnText('identifier', 'Identifier')
             ->setFilterText();
 
+        $grid->addColumnDateTime('date', 'Date')
+            ->setFormat($this->currentLocale->getDateTimeFormat())
+            ->setAlign('center')
+            ->setSortable()
+            ->setFilterDate();
+
         $grid->addColumnDateTime('updatedAt', 'Last edit')
             ->setFormat($this->currentLocale->getDateTimeFormat())
             ->setAlign('center')

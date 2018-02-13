@@ -26,6 +26,7 @@ use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\GalleryTranslation;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Model\Gallery\Repository\GalleryTranslationRepository;
+use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Form;
@@ -65,6 +66,7 @@ class GalleryForm extends BaseControl
      * @param GalleryRepository $galleryRepository
      * @param GalleryTranslationRepository $galleryTranslationRepository
      * @param LocaleRepository $localeRepository
+     * @param CurrentLocaleResolver $currentLocaleResolver
      * @param Gallery|null $gallery
      */
     public function __construct(
@@ -73,6 +75,7 @@ class GalleryForm extends BaseControl
         GalleryRepository $galleryRepository,
         GalleryTranslationRepository $galleryTranslationRepository,
         LocaleRepository $localeRepository,
+        CurrentLocaleResolver $currentLocaleResolver,
         Gallery $gallery = null
     ) {
         parent::__construct();
@@ -83,6 +86,7 @@ class GalleryForm extends BaseControl
         $this->entityManager = $entityManager;
         $this->galleryRepository = $galleryRepository;
         $this->galleryTranslationRepository = $galleryTranslationRepository;
+        $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
         $this->localeRepository = $localeRepository;
 
 
@@ -93,6 +97,7 @@ class GalleryForm extends BaseControl
                 'isActive' => $this->gallery->isActive(),
                 'isInOverview' => $this->gallery->isInOverview(),
                 'isShowName' => $this->gallery->isShowName(),
+                'date' => ($this->gallery->getDate() ? $this->gallery->getDate()->format($this->currentLocale->getDateFormat()) : null),
             ];
 
             foreach ($this->gallery->getTranslations() AS $translation)
@@ -124,6 +129,8 @@ class GalleryForm extends BaseControl
 
             $container->addTextArea('description');
         }
+
+        $form->addText('date');
 
         $form->addText('identifier')
             ->setRequired('Please enter identifier');
@@ -167,6 +174,8 @@ class GalleryForm extends BaseControl
     {
         $values = $form->getValues();
 
+        $date = ($values->date ? \DateTime::createFromFormat($this->currentLocale->getDateFormat(), $values->date) : null);
+        
         if ($this->gallery) {
             $gallery = $this->gallery;
             $gallery->setIdentifier($values->identifier);
@@ -174,9 +183,11 @@ class GalleryForm extends BaseControl
             $gallery->setIsInOverview($values->isInOverview);
             $gallery->setIsShowName($values->isShowName);
             $gallery->setPosition($values->position);
+            $gallery->setDate($date);
         } else {
             $gallery = new Gallery(
                 $values->identifier,
+                $date,
                 $values->isActive,
                 $values->isShowName,
                 $values->isInOverview

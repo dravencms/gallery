@@ -55,6 +55,12 @@ class Gallery
     private $position;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    private $date;
+
+    /**
      * @var ArrayCollection|Picture[]
      * @ORM\OneToMany(targetEntity="Picture", mappedBy="gallery",cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
@@ -70,13 +76,21 @@ class Gallery
     /**
      * Gallery constructor.
      * @param $identifier
+     * @param \DateTime $date
      * @param bool $isActive
      * @param bool $isShowName
      * @param bool $isInOverview
      */
-    public function __construct($identifier, $isActive = true, $isShowName = true, $isInOverview = true)
+    public function __construct(
+        $identifier,
+        \DateTime $date,
+        $isActive = true,
+        $isShowName = true,
+        $isInOverview = true
+    )
     {
         $this->identifier = $identifier;
+        $this->date = $date;
         $this->isActive = $isActive;
         $this->isShowName = $isShowName;
         $this->isInOverview = $isInOverview;
@@ -91,6 +105,14 @@ class Gallery
     public function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
+    }
+
+    /**
+     * @param \DateTime|null $date
+     */
+    public function setDate(\DateTime $date = null)
+    {
+        $this->date = $date;
     }
 
     /**
@@ -179,6 +201,14 @@ class Gallery
     public function getIdentifier()
     {
         return $this->identifier;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
     
     /**
