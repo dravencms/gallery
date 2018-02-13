@@ -53,6 +53,9 @@ class GalleryForm extends BaseControl
     /** @var LocaleRepository */
     private $localeRepository;
 
+    /** @var \Dravencms\Model\Locale\Entities\Locale|null */
+    private $currentLocale;
+
     /** @var Gallery|null */
     private $gallery = null;
 

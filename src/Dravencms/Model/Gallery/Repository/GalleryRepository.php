@@ -113,4 +113,30 @@ class GalleryRepository
     {
         return $this->galleryRepository->findAll();
     }
+
+    /**
+     * @return Gallery[]
+     */
+    public function getActiveByDate()
+    {
+        return $this->galleryRepository->findBy(['isActive' => true], ['date' => 'DESC']);
+    }
+
+    /**
+     * @param $slug
+     * @return Gallery|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getOneBySlug($slug)
+    {
+        return $this->galleryRepository->createQueryBuilder('g')
+            ->select('g')
+            ->join('g.translations', 'gt')
+            ->where('gt.slug = :slug')
+            ->setParameters([
+                'slug' => $slug
+            ])
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

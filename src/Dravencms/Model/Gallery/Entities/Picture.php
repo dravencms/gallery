@@ -1,7 +1,9 @@
 <?php
 namespace Dravencms\Model\Gallery\Entities;
 
+use Doctrine\Common\Collections\Criteria;
 use Dravencms\Model\File\Entities\StructureFile;
+use Dravencms\Model\Locale\Entities\ILocale;
 use Dravencms\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -259,6 +261,16 @@ class Picture
     public function getIdentifier()
     {
         return $this->identifier;
+    }
+
+    /**
+     * @param ILocale $locale
+     * @return GalleryTranslation
+     */
+    public function translate(ILocale $locale)
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("locale", $locale));
+        return $this->getTranslations()->matching($criteria)->first();
     }
 }
 

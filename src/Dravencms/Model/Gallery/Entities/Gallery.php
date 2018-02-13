@@ -4,6 +4,7 @@ namespace Dravencms\Model\Gallery\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Dravencms\Model\Locale\Entities\ILocale;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
 use Gedmo\Sortable\Sortable;
@@ -56,7 +57,7 @@ class Gallery
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $date;
 
@@ -218,6 +219,16 @@ class Gallery
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq("isPrimary", true));
         return $this->getPictures()->matching($criteria);
+    }
+
+    /**
+     * @param ILocale $locale
+     * @return GalleryTranslation
+     */
+    public function translate(ILocale $locale)
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("locale", $locale));
+        return $this->getTranslations()->matching($criteria)->first();
     }
 }
 
