@@ -34,7 +34,7 @@ class PictureTranslation
 
     /**
      * @var string
-     * @ORM\Column(type="text",nullable=false)
+     * @ORM\Column(type="text",nullable=true)
      */
     private $description;
 
@@ -56,10 +56,10 @@ class PictureTranslation
      * PictureTranslation constructor.
      * @param Picture $picture
      * @param Locale $locale
-     * @param $name
-     * @param $description
+     * @param string $name
+     * @param string|null $description
      */
-    public function __construct(Picture $picture, Locale $locale, $name, $description)
+    public function __construct(Picture $picture, Locale $locale, $name, $description = null)
     {
         $this->name = $name;
         $this->description = $description;
@@ -76,9 +76,9 @@ class PictureTranslation
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      */
-    public function setDescription($description)
+    public function setDescription($description = null)
     {
         $this->description = $description;
     }

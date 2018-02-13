@@ -26,7 +26,10 @@ use Dravencms\Model\File\Repository\StructureFileRepository;
 use Dravencms\Model\File\Repository\StructureRepository;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
+use Dravencms\Model\Gallery\Entities\PictureTranslation;
 use Dravencms\Model\Gallery\Repository\PictureRepository;
+use Dravencms\Model\Gallery\Repository\PictureTranslationRepository;
+use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
@@ -48,6 +51,9 @@ class DirectoryPictureForm extends BaseControl
     /** @var PictureRepository */
     private $pictureRepository;
 
+    /** @var PictureTranslationRepository */
+    private $pictureTranslationRepository;
+
     /** @var StructureFileRepository */
     private $structureFileRepository;
 
@@ -56,6 +62,9 @@ class DirectoryPictureForm extends BaseControl
 
     /** @var StructureRepository */
     private $structureRepository;
+
+    /** @var LocaleRepository */
+    private $localeRepository;
 
     /** @var Gallery */
     private $gallery;
@@ -68,18 +77,22 @@ class DirectoryPictureForm extends BaseControl
      * @param BaseFormFactory $baseFormFactory
      * @param EntityManager $entityManager
      * @param PictureRepository $pictureRepository
+     * @param PictureTranslationRepository $pictureTranslationRepository
      * @param TagRepository $tagRepository
      * @param StructureFileRepository $structureFileRepository
      * @param StructureRepository $structureRepository
+     * @param LocaleRepository $localeRepository
      * @param Gallery $gallery
      */
     public function __construct(
         BaseFormFactory $baseFormFactory,
         EntityManager $entityManager,
         PictureRepository $pictureRepository,
+        PictureTranslationRepository $pictureTranslationRepository,
         TagRepository $tagRepository,
         StructureFileRepository $structureFileRepository,
         StructureRepository $structureRepository,
+        LocaleRepository $localeRepository,
         Gallery $gallery
     ) {
         parent::__construct();
@@ -91,7 +104,9 @@ class DirectoryPictureForm extends BaseControl
         $this->pictureRepository = $pictureRepository;
         $this->tagRepository = $tagRepository;
         $this->structureFileRepository = $structureFileRepository;
+        $this->pictureTranslationRepository = $pictureTranslationRepository;
         $this->structureRepository = $structureRepository;
+        $this->localeRepository = $localeRepository;
 
         $this['form']->setDefaults(['isActive' => true]);
     }
@@ -152,10 +167,30 @@ class DirectoryPictureForm extends BaseControl
         $structure = $this->structureRepository->getOneById($values->structure);
         foreach ($structure->getStructureFiles() AS $structureFile)
         {
-            $picture = new Picture($this->gallery, $structureFile, $structureFile->getId().'-'.$structureFile->getName(), $values->isActive, false);
+            $identifier = $structureFile->getId().'-'.$structureFile->getName();
+            
+            $picture = new Picture($this->gallery, $structureFile, $identifier, $values->isActive, false);
             $picture->setTags($tags);
 
             $this->entityManager->persist($picture);
+            $this->entityManager->flush();
+
+            foreach ($this->localeRepository->getActive() AS $activeLocale) {
+                if ($pictureTranslation = $this->pictureTranslationRepository->getTranslation($picture, $activeLocale))
+                {
+                    $pictureTranslation->setName($identifier);
+                }
+                else
+                {
+                    $pictureTranslation = new PictureTranslation(
+                        $picture,
+                        $activeLocale,
+                        $identifier
+                    );
+                }
+
+                $this->entityManager->persist($pictureTranslation);
+            }
         }
         
         $this->entityManager->flush();
