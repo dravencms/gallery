@@ -167,7 +167,8 @@ class DirectoryPictureForm extends BaseControl
         $structure = $this->structureRepository->getOneById($values->structure);
         foreach ($structure->getStructureFiles() AS $structureFile)
         {
-            $identifier = $structureFile->getId().'-'.$structureFile->getName();
+            $name = $structureFile->getId().'-'.$structureFile->getName();
+            $identifier = md5($name.microtime().rand().$structureFile->getFile()->getSum());
             
             $picture = new Picture($this->gallery, $structureFile, $identifier, $values->isActive, false);
             $picture->setTags($tags);
@@ -185,7 +186,7 @@ class DirectoryPictureForm extends BaseControl
                     $pictureTranslation = new PictureTranslation(
                         $picture,
                         $activeLocale,
-                        $identifier
+                        $name
                     );
                 }
 
