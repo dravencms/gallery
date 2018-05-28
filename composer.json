@@ -32,6 +32,11 @@
       "configuration": {
         "extensions": {
           "gallery": "Dravencms\\Gallery\\DI\\GalleryExtension"
+        },
+        "doctrine":{
+          "metadata": {
+            "Dravencms\\Model\\Gallery": "%appDir%/../vendor/dravencms/gallery/src/Dravencms/Model/Gallery"
+          }
         }
       },
       "scripts": {
