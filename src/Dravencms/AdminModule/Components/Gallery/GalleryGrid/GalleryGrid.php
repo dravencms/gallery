@@ -167,9 +167,13 @@ class GalleryGrid extends BaseControl
      */
     public function handleDelete($id)
     {
-        $locales = $this->galleryRepository->getById($id);
-        foreach ($locales AS $locale)
+        $galleries = $this->galleryRepository->getById($id);
+        foreach ($galleries AS $gallery)
         {
+            foreach($gallery->getPictures() AS $picture){
+                $this->entityManager->remove($picture);
+            }
+
             $this->entityManager->remove($locale);
         }
 
