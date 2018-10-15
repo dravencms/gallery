@@ -8,7 +8,7 @@ The best way to install dravencms/gallery is using  [Composer](http://getcompose
 
 
 ```sh
-$ composer require dravencms/gallery:@dev
+$ composer require dravencms/gallery
 ```
 
 Then you have to register extension in `config.neon`.
