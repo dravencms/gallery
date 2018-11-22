@@ -84,7 +84,7 @@ class Gallery
      */
     public function __construct(
         $identifier,
-        \DateTime $date,
+        \DateTime $date = null,
         $isActive = true,
         $isShowName = true,
         $isInOverview = true
