@@ -34,6 +34,7 @@ use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Form;
+use Salamek\Files\Models\IFile;
 
 /**
  * Description of DirectoryPictureForm
@@ -167,6 +168,12 @@ class DirectoryPictureForm extends BaseControl
         $structure = $this->structureRepository->getOneById($values->structure);
         foreach ($structure->getStructureFiles() AS $structureFile)
         {
+            //Ignore non image files
+            if ($structureFile->getFile()->getType() != IFile::TYPE_IMAGE)
+            {
+                continue;
+            }
+            
             $name = $structureFile->getId().'-'.$structureFile->getName();
             $identifier = md5($name.microtime().rand().$structureFile->getFile()->getSum());
             
