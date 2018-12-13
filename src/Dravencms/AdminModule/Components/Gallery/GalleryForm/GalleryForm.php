@@ -168,6 +168,13 @@ class GalleryForm extends BaseControl
             }
         }
 
+        $date = ($values->date ? \DateTime::createFromFormat($this->currentLocale->getDateFormat(), $values->date) : null);
+
+        if ($date === false)
+        {
+            $form->addError(sprintf('Datum má nesprávný formát, pouze %s je podporován.', $this->currentLocale->getDateFormat()));
+        }
+
         if (!$this->presenter->isAllowed('gallery', 'edit')) {
             $form->addError('Nemáte oprávění editovat article.');
         }
