@@ -123,6 +123,15 @@ class GalleryRepository
     }
 
     /**
+     * @param int $offset
+     * @return Gallery[]
+     */
+    public function getOverOffset(int $offset)
+    {
+        return $this->galleryRepository->findBy([], ['createdAt' => 'DESC'], null, $offset);
+    }
+
+    /**
      * @param $slug
      * @return Gallery|null
      * @throws \Doctrine\ORM\NonUniqueResultException
