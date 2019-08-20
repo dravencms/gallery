@@ -174,7 +174,7 @@ class GalleryGrid extends BaseControl
                 $this->entityManager->remove($picture);
             }
 
-            $this->entityManager->remove($locale);
+            $this->entityManager->remove($gallery);
         }
 
         $this->entityManager->flush();
