@@ -9,6 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
 use Gedmo\Sortable\Sortable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Kdyby\Doctrine\Entities\Attributes\Identifier;
 use Nette;
 
@@ -26,7 +27,7 @@ class Gallery
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
+     * @ORM\Column(type="string",length=255,nullable=false, unique=true)
      */
     private $identifier;
 

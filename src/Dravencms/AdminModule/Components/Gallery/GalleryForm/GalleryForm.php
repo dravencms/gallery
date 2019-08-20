@@ -162,12 +162,6 @@ class GalleryForm extends BaseControl
             $form->addError('Tento identifier je již zabrán.');
         }
 
-        foreach ($this->localeRepository->getActive() AS $activeLocale) {
-            if (!$this->galleryTranslationRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->gallery)) {
-                $form->addError('Tento název je již zabrán.');
-            }
-        }
-
         $date = ($values->date ? \DateTime::createFromFormat($this->currentLocale->getDateFormat(), $values->date) : null);
 
         if ($date === false)

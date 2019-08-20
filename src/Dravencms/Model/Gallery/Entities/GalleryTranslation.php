@@ -16,7 +16,7 @@ use Nette;
  * Class GalleryTranslation
  * @package App\Model\Gallery\Entities
  * @ORM\Entity
- * @ORM\Table(name="galleryGalleryTranslation", uniqueConstraints={@UniqueConstraint(name="gallery_translation_name_unique", columns={"gallery_id", "locale_id", "name"})})
+ * @ORM\Table(name="galleryGalleryTranslation")
  */
 class GalleryTranslation
 {
