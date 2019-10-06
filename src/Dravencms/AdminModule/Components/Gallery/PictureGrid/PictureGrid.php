@@ -172,7 +172,7 @@ class PictureGrid extends BaseControl
 
         return $grid;
     }
-    
+
     /**
      * @param $id
      * @throws \Exception

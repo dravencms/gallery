@@ -65,6 +65,12 @@ class CleanGalleryCommand extends Command
             foreach($galleriesToDelete AS $gallery)
             {
                 foreach($gallery->getPictures() AS $picture){
+                    $structureFileLink = $picture->getStructureFileLink();
+                    if ($structureFileLink) {
+                        $structureFileLink->setIsUsed(false);
+                        $structureFileLink->setIsAutoclean(true);
+                        $this->entityManager->persist($structureFileLink);
+                    }
                     $this->entityManager->remove($picture);
                 }
                 $this->entityManager->remove($gallery);
