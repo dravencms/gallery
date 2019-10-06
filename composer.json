@@ -17,6 +17,7 @@
   "require": {
     "dravencms/admin": ">=1.0",
     "dravencms/tag": ">=1.0",
+    "dravencms/file": ">=1.1.4",
     "dravencms/structure": ">=1.0"
   },
   "require-dev": {
@@ -38,10 +39,6 @@
             "Dravencms\\Model\\Gallery": "%appDir%/../vendor/dravencms/gallery/src/Dravencms/Model/Gallery"
           }
         }
-      },
-      "scripts": {
-        "post-install": "Dravencms\\Gallery\\Script\\PostInstall",
-        "pre-uninstall": "Dravencms\\Gallery\\Script\\PreUninstall"
       }
     }
   }
