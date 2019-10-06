@@ -108,9 +108,9 @@ class PictureGrid extends BaseControl
             ->setAlign('center')
             ->setRenderer(function ($row) use($grid){
                 /** @var Picture $row */
-                if ($haveImage = $row->getStructureFile()) {
+                if ($haveImage = $row->getStructureFileLink()) {
                     $img = Html::el('img');
-                    $img->src = $this->imagePipe->request($haveImage->getFile(), '200x');
+                    $img->src = $this->imagePipe->request($haveImage->getStructureFile()->getFile(), '200x');
                 } else {
                     $img = '';
                 }

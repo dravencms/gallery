@@ -25,6 +25,7 @@ use Dravencms\Components\BaseForm\BaseFormFactory;
 
 use Dravencms\File\File;
 use Dravencms\Model\File\Entities\Structure;
+use Dravencms\Model\File\Entities\StructureFileLink;
 use Dravencms\Model\File\Repository\StructureFileRepository;
 use Dravencms\Model\File\Repository\StructureRepository;
 use Dravencms\Model\Gallery\Entities\Gallery;
@@ -249,9 +250,20 @@ class PictureForm extends BaseControl
             $picture->setIsActive($values->isActive);
             $picture->setIsPrimary($values->isPrimary);
             $picture->setPosition($values->position);
-            $picture->setStructureFile($structureFile);
+
+            if ($picture->getStructureFileLink()) {
+                $existingStructureFile = $picture->getStructureFileLink();
+                $existingStructureFile->setStructureFile($structureFile);
+
+            } else {
+                $existingStructureFile = new StructureFileLink(\Dravencms\Gallery\Gallery::PLUGIN_NAME, $structureFile, true, true);
+            }
+
+            $this->entityManager->persist($existingStructureFile);
         } else {
-            $picture = new Picture($this->gallery, $structureFile, $values->identifier, $values->isActive, $values->isPrimary);
+            $structureFileLink = new StructureFileLink(\Dravencms\Gallery\Gallery::PLUGIN_NAME, $structureFile, true, true);
+            $this->entityManager->persist($structureFileLink);
+            $picture = new Picture($this->gallery, $structureFileLink, $values->identifier, $values->isActive, $values->isPrimary);
         }
         $picture->setTags($tags);
 

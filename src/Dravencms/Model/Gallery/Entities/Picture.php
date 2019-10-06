@@ -3,6 +3,7 @@ namespace Dravencms\Model\Gallery\Entities;
 
 use Doctrine\Common\Collections\Criteria;
 use Dravencms\Model\File\Entities\StructureFile;
+use Dravencms\Model\File\Entities\StructureFileLink;
 use Dravencms\Model\Locale\Entities\ILocale;
 use Dravencms\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -59,6 +60,13 @@ class Picture
     private $structureFile;
 
     /**
+     * @var StructureFileLink
+     * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFileLink")
+     * @ORM\JoinColumn(name="structure_file_link_id", referencedColumnName="id")
+     */
+    private $structureFileLink;
+
+    /**
      * @var Gallery
      * @Gedmo\SortableGroup
      * @ORM\ManyToOne(targetEntity="Gallery", inversedBy="pictures")
@@ -91,18 +99,18 @@ class Picture
     /**
      * Picture constructor.
      * @param Gallery $gallery
-     * @param StructureFile $structureFile
+     * @param StructureFileLink $structureFileLink
      * @param $identifier
      * @param bool $isActive
      * @param bool $isPrimary
      */
-    public function __construct(Gallery $gallery, StructureFile $structureFile, $identifier, $isActive = true, $isPrimary = false)
+    public function __construct(Gallery $gallery, StructureFileLink $structureFileLink, string $identifier, bool $isActive = true, bool $isPrimary = false)
     {
         $this->identifier = $identifier;
         $this->gallery = $gallery;
         $this->isActive = $isActive;
         $this->isPrimary = $isPrimary;
-        $this->structureFile = $structureFile;
+        $this->structureFileLink = $structureFileLink;
 
         $this->tags = new ArrayCollection();
         $this->translations = new ArrayCollection();
@@ -111,7 +119,7 @@ class Picture
     /**
      * @param string $identifier
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
     }
@@ -119,15 +127,15 @@ class Picture
     /**
      * @param boolean $isActive
      */
-    public function setIsActive($isActive)
+    public function setIsActive(bool $isActive): void
     {
         $this->isActive = $isActive;
     }
 
     /**
-     * @param mixed $position
+     * @param int $position
      */
-    public function setPosition($position)
+    public function setPosition(int $position): void
     {
         $this->position = $position;
     }
@@ -135,15 +143,23 @@ class Picture
     /**
      * @param StructureFile $structureFile
      */
-    public function setStructureFile(StructureFile $structureFile)
+    public function setStructureFile(StructureFile $structureFile = null): void
     {
         $this->structureFile = $structureFile;
     }
 
     /**
+     * @param StructureFileLink $structureFileLink
+     */
+    public function setStructureFileLink(StructureFileLink $structureFileLink): void
+    {
+        $this->structureFileLink = $structureFileLink;
+    }
+
+    /**
      * @param boolean $isPrimary
      */
-    public function setIsPrimary($isPrimary)
+    public function setIsPrimary(bool $isPrimary): void
     {
         $this->isPrimary = $isPrimary;
     }
@@ -151,7 +167,7 @@ class Picture
     /**
      * @param Tag $tag
      */
-    public function addTag(Tag $tag)
+    public function addTag(Tag $tag): void
     {
         if ($this->tags->contains($tag))
         {
@@ -164,7 +180,7 @@ class Picture
     /**
      * @param Tag $tag
      */
-    public function removeTag(Tag $tag)
+    public function removeTag(Tag $tag): void
     {
         if (!$this->tags->contains($tag))
         {
@@ -178,7 +194,7 @@ class Picture
      *
      * @param ArrayCollection $tags
      */
-    public function setTags(ArrayCollection $tags)
+    public function setTags(ArrayCollection $tags): void
     {
         //Remove all not in
         foreach($this->tags AS $tag)
@@ -202,7 +218,7 @@ class Picture
     /**
      * @return boolean
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->isActive;
     }
@@ -210,25 +226,34 @@ class Picture
     /**
      * @return boolean
      */
-    public function isPrimary()
+    public function isPrimary(): bool
     {
         return $this->isPrimary;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
 
     /**
      * @return StructureFile
+     * @deprecated Use getStructureFileLink()->getStructureFile()
      */
     public function getStructureFile()
     {
-        return $this->structureFile;
+        return ($this->structureFileLink ? $this->structureFileLink->getStructureFile() : $this->structureFile);
+    }
+
+    /**
+     * @return StructureFileLink
+     */
+    public function getStructureFileLink()
+    {
+        return $this->structureFileLink;
     }
 
     /**
@@ -242,7 +267,7 @@ class Picture
     /**
      * @return Gallery
      */
-    public function getGallery()
+    public function getGallery(): Gallery
     {
         return $this->gallery;
     }
@@ -258,7 +283,7 @@ class Picture
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }

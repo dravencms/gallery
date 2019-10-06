@@ -4,13 +4,16 @@
         <div class="album-cover">
             <a n:cmsLink="Gallery\Gallery\Detail, 'id' => $gallery->getId()">
                 {if $gallery->getPrimaryPicture()->count()}
-                    {var $picture = $gallery->getPrimaryPicture()[0]->getStructureFile()}
+                    {var $picture = $gallery->getPrimaryPicture()[0]}
+                    {var $structureFile = ($picture->getStructureFileLink() ? $picture->getStructureFileLink()->getStructureFile(): null)}
                 {elseif $gallery->getPictures()->count()}
-                    {var $picture = $gallery->getPictures()[0]->getStructureFile()}
+                    {var $picture = $gallery->getPictures()[0]}
+                    {var $structureFile = ($picture->getStructureFileLink() ? $picture->getStructureFileLink()->getStructureFile(): null)}
                 {else}
-                    {var $picture = null}
+                    {var $structureFile = null}
                 {/if}
-                <img class="img-responsive" n:img="$picture, '553x306', 'exact'" alt="{$galleryTranslation->getName()}">
+
+                <img class="img-responsive" n:img="$structureFile, '553x306', 'exact'" alt="{$galleryTranslation->getName()}">
             </a>
             <div class="desc">
                 <h4><small><a n:cmsLink="Gallery\Gallery\Detail, 'id' => $gallery->getId()">{$galleryTranslation->getName()}</a></small></h4>

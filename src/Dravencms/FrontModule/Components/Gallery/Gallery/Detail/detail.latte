@@ -11,8 +11,9 @@
     <div class="row page-row">
         <div n:foreach="$pictureTranslations as $pictureTranslation" class="col-sm-6 col-xs-12 col-md-3">
             {var $image = $pictureTranslation->getPicture()}
-            <a  class="thumbnail text-center" href="{img $image->getStructureFile()->getFile(), 1024x}" title="{$pictureTranslation->getName()}" data-gallery>
-                <img class="img-responsive" n:img="$image->getStructureFile()->getFile(), 263x150, fit_exact" alt="{$pictureTranslation->getName()}" title="{$pictureTranslation->getName()}">
+            {var $structureFile = ($image->getStructureFileLink() ? $image->getStructureFileLink()->getStructureFile(): null)}
+            <a  class="thumbnail text-center" href="{img $structureFile->getFile(), 1024x}" title="{$pictureTranslation->getName()}" data-gallery>
+                <img class="img-responsive" n:img="$structureFile->getFile(), 263x150, fit_exact" alt="{$pictureTranslation->getName()}" title="{$pictureTranslation->getName()}">
             </a>
         </div>
     </div>

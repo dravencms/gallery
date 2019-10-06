@@ -22,6 +22,7 @@ namespace Dravencms\AdminModule\Components\Gallery\DirectoryPictureForm;
 
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
+use Dravencms\Model\File\Entities\StructureFileLink;
 use Dravencms\Model\File\Repository\StructureFileRepository;
 use Dravencms\Model\File\Repository\StructureRepository;
 use Dravencms\Model\Gallery\Entities\Gallery;
@@ -176,8 +177,10 @@ class DirectoryPictureForm extends BaseControl
             
             $name = $structureFile->getId().'-'.$structureFile->getName();
             $identifier = md5($name.microtime().rand().$structureFile->getFile()->getSum());
-            
-            $picture = new Picture($this->gallery, $structureFile, $identifier, $values->isActive, false);
+
+            $structureFileLink = new StructureFileLink(\Dravencms\Gallery\Gallery::PLUGIN_NAME, $structureFile, true, true);
+            $this->entityManager->persist($structureFileLink);
+            $picture = new Picture($this->gallery, $structureFileLink, $identifier, $values->isActive, false);
             $picture->setTags($tags);
 
             $this->entityManager->persist($picture);

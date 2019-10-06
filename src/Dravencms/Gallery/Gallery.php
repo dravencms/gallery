@@ -11,6 +11,9 @@ use Nette;
 class Gallery
 {
     use Nette\SmartObject;
+
+    const PLUGIN_NAME = 'gallery';
+
     public function __construct()
     {
     }

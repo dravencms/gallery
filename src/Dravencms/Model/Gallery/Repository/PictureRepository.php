@@ -32,7 +32,7 @@ class PictureRepository
      * @param $id
      * @return mixed|null|Picture
      */
-    public function getOneById($id)
+    public function getOneById(int $id)
     {
         return $this->pictureRepository->find($id);
     }
@@ -41,9 +41,17 @@ class PictureRepository
      * @param $id
      * @return Picture[]
      */
-    public function getById($id)
+    public function getById(int $id)
     {
         return $this->pictureRepository->findBy(['id' => $id]);
+    }
+
+    /**
+     * @return Picture[]
+     */
+    public function getAll()
+    {
+        return $this->pictureRepository->findAll();
     }
 
     /**
@@ -66,7 +74,7 @@ class PictureRepository
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isIdentifierFree($identifier, Gallery $gallery, Picture $pictureIgnore = null)
+    public function isIdentifierFree(string $identifier, Gallery $gallery, Picture $pictureIgnore = null)
     {
         $qb = $this->pictureRepository->createQueryBuilder('p')
             ->select('p')

@@ -1,1 +1,2 @@
 - Dravencms\Gallery\Console\CleanGalleryCommand
+- Dravencms\Gallery\Console\MigrateLinkGalleryCommand
