@@ -161,7 +161,7 @@ class PictureGrid extends BaseControl
                 ->setClass('btn btn-xs btn-danger ajax')
                 ->setConfirm('Do you really want to delete row %s?', 'identifier');
 
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'gridGroupActionDelete'];
+            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
 
         $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
@@ -172,15 +172,7 @@ class PictureGrid extends BaseControl
 
         return $grid;
     }
-
-    /**
-     * @param array $ids
-     */
-    public function gridGroupActionDelete(array $ids)
-    {
-        $this->handleDelete($ids);
-    }
-
+    
     /**
      * @param $id
      * @throws \Exception
@@ -190,6 +182,13 @@ class PictureGrid extends BaseControl
         $pictures = $this->pictureRepository->getById($id);
         foreach ($pictures AS $picture)
         {
+            $structureFileLink = $picture->getStructureFileLink();
+            if ($structureFileLink) {
+                $structureFileLink->setIsUsed(false);
+                $structureFileLink->setIsAutoclean(true);
+                $this->entityManager->persist($structureFileLink);
+            }
+
             $this->entityManager->remove($picture);
         }
 
