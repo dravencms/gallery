@@ -65,15 +65,26 @@ class MigrateLinkGalleryCommand extends Command
                 if ($picture->getStructureFile() && !$picture->getStructureFileLink()) {
                     $structureFileLink = new StructureFileLink(Gallery::PLUGIN_NAME, $picture->getStructureFile(), true, true);
                     $picture->setStructureFileLink($structureFileLink);
-                    $picture->setStructureFile(null);
                     $this->entityManager->persist($structureFileLink);
                     $this->entityManager->persist($picture);
                     $migrated++;
                 }
             }
+            
+            $this->entityManager->flush();
+
+            $cleared = 0;
+            foreach ($this->pictureRepository->getAll() AS $picture) {
+                if ($picture->getStructureFile() && $picture->getStructureFileLink()) {
+                    $picture->setStructureFile(null);
+                    $this->entityManager->persist($picture);
+                    $cleared++;
+                }
+            }
 
             $this->entityManager->flush();
-            $output->writeLn(sprintf('%s pictures has been migrated!', $migrated));
+            
+            $output->writeLn(sprintf('%s/%s pictures has been migrated!', $migrated, $cleared));
             return 0; // zero return code means everything is ok
 
         } catch (\Exception $e) {
