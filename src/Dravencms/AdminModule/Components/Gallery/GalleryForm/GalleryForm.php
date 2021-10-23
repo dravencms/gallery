@@ -204,7 +204,9 @@ class GalleryForm extends BaseControl
             $gallery->setIsActive($values->isActive);
             $gallery->setIsInOverview($values->isInOverview);
             $gallery->setIsShowName($values->isShowName);
-            $gallery->setPosition($values->position);
+            if ($values->position) {
+                $gallery->setPosition(intval($values->position));
+            }
             $gallery->setDate($date);
         } else {
             $gallery = new Gallery(

@@ -22,6 +22,7 @@ class GalleryExtension extends CompilerExtension
 
         if (class_exists(CmsExtension::class)) {
             $this->loadCmsComponents();
+            $this->loadCmsModels();
         }
 
         $this->loadComponents();
@@ -38,6 +39,19 @@ class GalleryExtension extends CompilerExtension
                 ->addTag(CmsExtension::TAG_COMPONENT);
             if (is_string($command)) {
                 $cli->setImplement($command);
+            } else {
+                throw new \InvalidArgumentException;
+            }
+        }
+    }
+
+    protected function loadCmsModels(): void
+    {
+        $builder = $this->getContainerBuilder();
+        foreach ($this->loadFromFile(__DIR__ . '/cmsModels.neon') as $i => $command) {
+            $cli = $builder->addDefinition($this->prefix('cmsModels.' . $i));
+            if (is_string($command)) {
+                $cli->setFactory($command);
             } else {
                 throw new \InvalidArgumentException;
             }

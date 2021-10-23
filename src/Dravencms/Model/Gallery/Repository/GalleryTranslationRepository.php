@@ -59,9 +59,9 @@ class GalleryTranslationRepository
     /**
      * @param Gallery $gallery
      * @param ILocale $locale
-     * @return GalleryTranslation
+     * @return GalleryTranslation|null
      */
-    public function getTranslation(Gallery $gallery, ILocale $locale): GalleryTranslation
+    public function getTranslation(Gallery $gallery, ILocale $locale): ?GalleryTranslation
     {
         $qb = $this->galleryTranslationRepository->createQueryBuilder('gt')
             ->select('gt')
