@@ -245,12 +245,7 @@ class PictureForm extends BaseControl
 
         $file = $values->file;
         if ($file->isOk()) {
-            $structureName = 'Gallery';
-            if (!$structure = $this->structureRepository->getOneByName($structureName)) {
-                $structure = new Structure($structureName);
-                $this->entityManager->persist($structure);
-                $this->entityManager->flush();
-            }
+            $structure = $this->structureRepository->getOneByName(\Dravencms\Gallery\Gallery::PLUGIN_NAME);
             $structureFile = $this->fileStorage->processFile($file, $structure);
         }
 

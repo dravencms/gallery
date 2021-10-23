@@ -6,3 +6,4 @@
 - Dravencms\Model\Gallery\Fixtures\AclOperationFixtures
 - Dravencms\Model\Gallery\Fixtures\AclResourceFixtures
 - Dravencms\Model\Gallery\Fixtures\AdminMenuFixtures
+- Dravencms\Model\Gallery\Fixtures\FileFixtures
