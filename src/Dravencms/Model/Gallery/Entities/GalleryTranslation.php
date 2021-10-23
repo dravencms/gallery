@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Gallery\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,7 +8,7 @@ use Dravencms\Model\Locale\Entities\Locale;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Sortable\Sortable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Nette;
 
@@ -60,10 +60,10 @@ class GalleryTranslation
      * GalleryTranslation constructor.
      * @param Gallery $gallery
      * @param Locale $locale
-     * @param $name
-     * @param $description
+     * @param string $name
+     * @param string $description
      */
-    public function __construct(Gallery $gallery, Locale $locale, $name, $description)
+    public function __construct(Gallery $gallery, Locale $locale, string $name, string $description)
     {
         $this->name = $name;
         $this->description = $description;
@@ -74,7 +74,7 @@ class GalleryTranslation
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -82,7 +82,7 @@ class GalleryTranslation
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
@@ -90,7 +90,7 @@ class GalleryTranslation
     /**
      * @param Gallery $gallery
      */
-    public function setGallery(Gallery $gallery)
+    public function setGallery(Gallery $gallery): void
     {
         $this->gallery = $gallery;
     }
@@ -98,7 +98,7 @@ class GalleryTranslation
     /**
      * @param Locale $locale
      */
-    public function setLocale(Locale $locale)
+    public function setLocale(Locale $locale): void
     {
         $this->locale = $locale;
     }
@@ -106,7 +106,7 @@ class GalleryTranslation
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -114,7 +114,7 @@ class GalleryTranslation
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -122,7 +122,7 @@ class GalleryTranslation
     /**
      * @return Gallery
      */
-    public function getGallery()
+    public function getGallery(): Gallery
     {
         return $this->gallery;
     }
@@ -130,15 +130,15 @@ class GalleryTranslation
     /**
      * @return Locale
      */
-    public function getLocale()
+    public function getLocale(): Locale
     {
         return $this->locale;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->slug;
     }

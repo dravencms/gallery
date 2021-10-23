@@ -1,6 +1,7 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Gallery\Entities;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Dravencms\Model\File\Entities\StructureFile;
 use Dravencms\Model\File\Entities\StructureFileLink;
@@ -9,10 +10,9 @@ use Dravencms\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
 use Gedmo\Sortable\Sortable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -174,7 +174,6 @@ class Picture
             return;
         }
         $this->tags->add($tag);
-        $tag->addGalleryPicture($this);
     }
 
     /**
@@ -187,7 +186,6 @@ class Picture
             return;
         }
         $this->tags->removeElement($tag);
-        $tag->removeGalleryPicture($this);
     }
 
     /**
@@ -243,7 +241,7 @@ class Picture
      * @return StructureFile
      * @deprecated Use getStructureFileLink()->getStructureFile()
      */
-    public function getStructureFile()
+    public function getStructureFile(): StructureFile
     {
         return ($this->structureFileLink ? $this->structureFileLink->getStructureFile() : $this->structureFile);
     }
@@ -251,7 +249,7 @@ class Picture
     /**
      * @return StructureFileLink
      */
-    public function getStructureFileLink()
+    public function getStructureFileLink(): StructureFileLink
     {
         return $this->structureFileLink;
     }
@@ -259,7 +257,7 @@ class Picture
     /**
      * @return ArrayCollection|\Doctrine\Common\Collections\Collection|\Dravencms\Model\Tag\Entities\Tag[]
      */
-    public function getTags()
+    public function getTags(): Collection
     {
         return $this->tags;
     }
@@ -275,7 +273,7 @@ class Picture
     /**
      * @return ArrayCollection|PictureTranslation[]
      */
-    public function getTranslations()
+    public function getTranslations(): Collection
     {
         return $this->translations;
     }
@@ -292,7 +290,7 @@ class Picture
      * @param ILocale $locale
      * @return GalleryTranslation
      */
-    public function translate(ILocale $locale)
+    public function translate(ILocale $locale): GalleryTranslation
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq("locale", $locale));
         return $this->getTranslations()->matching($criteria)->first();

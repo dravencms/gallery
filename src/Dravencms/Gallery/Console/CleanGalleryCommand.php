@@ -1,11 +1,9 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Dravencms\Gallery\Console;
 
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,6 +15,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CleanGalleryCommand extends Command
 {
+    protected static $defaultName = 'gallery:gallery:clean';
+    protected static $defaultDescription = 'Keep only defined number of last created galleries';
+
     /** @var EntityManager */
     private $entityManager;
 
@@ -44,9 +45,6 @@ class CleanGalleryCommand extends Command
      */
     protected function configure(): void
     {
-        $this->setName('gallery:gallery:clean')
-            ->setDescription('Keep only defined number of last created galleries');
-
         $this->addArgument('keep', InputArgument::REQUIRED, 'How many last galleries to keep?');
     }
 

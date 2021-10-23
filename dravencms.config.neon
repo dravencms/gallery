@@ -1,0 +1,7 @@
+extensions:
+    dravencms.gallery: Dravencms\Gallery\DI\GalleryExtension
+
+
+nettrine.orm.annotations:
+    mapping:
+        Dravencms\Model\Gallery: %appDir%/../vendor/dravencms/gallery/src/Dravencms/Model/Gallery

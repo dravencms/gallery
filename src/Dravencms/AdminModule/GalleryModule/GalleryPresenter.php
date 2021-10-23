@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * To change this template, choose Tools | Templates
@@ -6,12 +6,18 @@
  */
 namespace Dravencms\AdminModule\GalleryModule;
 
+use Dravencms\AdminModule\Components\Gallery\DirectoryPictureForm\DirectoryPictureForm;
 use Dravencms\AdminModule\Components\Gallery\DirectoryPictureForm\DirectoryPictureFormFactory;
+use Dravencms\AdminModule\Components\Gallery\GalleryForm\GalleryForm;
 use Dravencms\AdminModule\Components\Gallery\GalleryForm\GalleryFormFactory;
+use Dravencms\AdminModule\Components\Gallery\GalleryGrid\GalleryGrid;
 use Dravencms\AdminModule\Components\Gallery\GalleryGrid\GalleryGridFactory;
+use Dravencms\AdminModule\Components\Gallery\PictureForm\PictureForm;
 use Dravencms\AdminModule\Components\Gallery\PictureForm\PictureFormFactory;
+use Dravencms\AdminModule\Components\Gallery\PictureGrid\PictureGrid;
 use Dravencms\AdminModule\Components\Gallery\PictureGrid\PictureGridFactory;
 use Dravencms\AdminModule\SecuredPresenter;
+use Dravencms\Flash;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
@@ -58,7 +64,7 @@ class GalleryPresenter extends SecuredPresenter
     /**
      * @isAllowed(gallery,edit)
      */
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->h1 = 'Galleries';
     }
@@ -68,7 +74,7 @@ class GalleryPresenter extends SecuredPresenter
      * @param $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit($id)
+    public function actionEdit(int $id = null): void
     {
         if ($id) {
             $this->template->h1 = 'Edit gallery';
@@ -83,10 +89,11 @@ class GalleryPresenter extends SecuredPresenter
     }
 
     /**
-     * @param $galleryId
-     * @param null $pictureId
+     * @param int $galleryId
+     * @param int|null $pictureId
+     * @throws \Nette\Application\BadRequestException
      */
-    public function actionEditPicture($galleryId, $pictureId = null)
+    public function actionEditPicture(int $galleryId, int $pictureId = null)
     {
         $this->gallery = $this->galleryRepository->getOneById($galleryId);
         if ($pictureId)
@@ -106,9 +113,9 @@ class GalleryPresenter extends SecuredPresenter
     }
 
     /**
-     * @param $galleryId
+     * @param int $galleryId
      */
-    public function actionNewPictureFromDirectory($galleryId)
+    public function actionNewPictureFromDirectory(int $galleryId): void
     {
         $this->gallery = $this->galleryRepository->getOneById($galleryId);
         $this->template->h1 = 'New pictures from directory into gallery: '. $this->gallery->getIdentifier();
@@ -117,7 +124,7 @@ class GalleryPresenter extends SecuredPresenter
     /**
      * @param $id
      */
-    public function actionPictures($id)
+    public function actionPictures(int $id): void
     {
         $this->gallery = $this->galleryRepository->getOneById($id);
         $this->template->gallery = $this->gallery;
@@ -125,14 +132,14 @@ class GalleryPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \AdminModule\Components\Gallery\GalleryForm
+     * @return GalleryForm
      */
-    public function createComponentFormGallery()
+    public function createComponentFormGallery(): GalleryForm
     {
         $control = $this->galleryFormFactory->create($this->gallery);
         $control->onSuccess[] = function()
         {
-            $this->flashMessage('Gallery has been successfully saved', 'alert-success');
+            $this->flashMessage('Gallery has been successfully saved', Flash::SUCCESS);
             $this->redirect("Gallery:");
         };
 
@@ -140,56 +147,56 @@ class GalleryPresenter extends SecuredPresenter
     }
 
     /**
-     * @return \AdminModule\Components\Gallery\PictureForm
+     * @return PictureForm
      */
-    public function createComponentFormPicture()
+    public function createComponentFormPicture(): PictureForm
     {
         $control = $this->pictureFormFactory->create($this->gallery, $this->picture);
         $control->onSuccess[] = function()
         {
-            $this->flashMessage('Picture has been successfully saved', 'alert-success');
+            $this->flashMessage('Picture has been successfully saved', Flash::SUCCESS);
             $this->redirect('Gallery:pictures', $this->gallery->getId());
         };
         return $control;
     }
 
     /**
-     * @return \AdminModule\Components\Gallery\GalleryGrid
+     * @return GalleryGrid
      */
-    public function createComponentGridGallery()
+    public function createComponentGridGallery(): GalleryGrid
     {
         $control = $this->galleryGridFactory->create();
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Gallery has been successfully deleted', 'alert-success');
+            $this->flashMessage('Gallery has been successfully deleted', Flash::SUCCESS);
             $this->redirect('Gallery:');
         };
         return $control;
     }
 
     /**
-     * @return \AdminModule\Components\Gallery\PictureGrid
+     * @return PictureGrid
      */
-    public function createComponentGridPicture()
+    public function createComponentGridPicture(): PictureGrid
     {
         $control = $this->pictureGridFactory->create($this->gallery);
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Picture has been successfully deleted', 'alert-success');
+            $this->flashMessage('Picture has been successfully deleted', Flash::SUCCESS);
             $this->redirect('Gallery:pictures', $this->gallery->getId());
         };
         return $control;
     }
 
     /**
-     * @return \AdminModule\Components\Gallery\DirectoryPictureForm
+     * @return DirectoryPictureForm
      */
-    public function createComponentFormDirectoryPicture()
+    public function createComponentFormDirectoryPicture(): DirectoryPictureForm
     {
         $control = $this->directoryPictureFormFactory->create($this->gallery);
         $control->onSuccess[] = function()
         {
-            $this->flashMessage('Pictures has been successfully saved', 'alert-success');
+            $this->flashMessage('Pictures has been successfully saved', Flash::SUCCESS);
             $this->redirect('Gallery:pictures', $this->gallery->getId());
         };
         return $control;

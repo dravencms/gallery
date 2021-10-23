@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -28,8 +28,9 @@ use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Model\Gallery\Repository\GalleryTranslationRepository;
 use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Form;
+use Dravencms\Database\EntityManager;
+use Dravencms\Components\BaseForm\Form;
+use Nette\Security\User;
 
 /**
  * Description of GalleryForm
@@ -56,6 +57,9 @@ class GalleryForm extends BaseControl
     /** @var \Dravencms\Model\Locale\Entities\Locale|null */
     private $currentLocale;
 
+    /** @var User */
+    private $user;
+
     /** @var Gallery|null */
     private $gallery = null;
 
@@ -70,7 +74,9 @@ class GalleryForm extends BaseControl
      * @param GalleryTranslationRepository $galleryTranslationRepository
      * @param LocaleRepository $localeRepository
      * @param CurrentLocaleResolver $currentLocaleResolver
+     * @param User $user
      * @param Gallery|null $gallery
+     * @throws \Exception
      */
     public function __construct(
         BaseFormFactory $baseFormFactory,
@@ -79,15 +85,16 @@ class GalleryForm extends BaseControl
         GalleryTranslationRepository $galleryTranslationRepository,
         LocaleRepository $localeRepository,
         CurrentLocaleResolver $currentLocaleResolver,
+        User $user,
         Gallery $gallery = null
     ) {
-        parent::__construct();
 
         $this->gallery = $gallery;
 
         $this->baseFormFactory = $baseFormFactory;
         $this->entityManager = $entityManager;
         $this->galleryRepository = $galleryRepository;
+        $this->user = $user;
         $this->galleryTranslationRepository = $galleryTranslationRepository;
         $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
         $this->localeRepository = $localeRepository;
@@ -120,7 +127,10 @@ class GalleryForm extends BaseControl
         $this['form']->setDefaults($defaults);
     }
 
-    protected function createComponentForm()
+    /**
+     * @return Form
+     */
+    protected function createComponentForm(): Form
     {
         $form = $this->baseFormFactory->create();
 
@@ -154,7 +164,11 @@ class GalleryForm extends BaseControl
         return $form;
     }
 
-    public function editFormValidate(Form $form)
+    /**
+     * @param Form $form
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function editFormValidate(Form $form): void
     {
         $values = $form->getValues();
 
@@ -169,12 +183,16 @@ class GalleryForm extends BaseControl
             $form->addError(sprintf('Datum má nesprávný formát, pouze %s je podporován.', $this->currentLocale->getDateFormat()));
         }
 
-        if (!$this->presenter->isAllowed('gallery', 'edit')) {
+        if (!$this->user->isAllowed('gallery', 'edit')) {
             $form->addError('Nemáte oprávění editovat article.');
         }
     }
 
-    public function editFormSucceeded(Form $form)
+    /**
+     * @param Form $form
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function editFormSucceeded(Form $form): void
     {
         $values = $form->getValues();
 
@@ -227,8 +245,7 @@ class GalleryForm extends BaseControl
         $this->onSuccess();
     }
 
-
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->activeLocales = $this->localeRepository->getActive();

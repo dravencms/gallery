@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -7,13 +7,12 @@ namespace Dravencms\Model\Gallery\Repository;
 
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\GalleryTranslation;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
 use Dravencms\Model\Locale\Entities\ILocale;
 
 class GalleryTranslationRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|GalleryTranslation */
     private $galleryTranslationRepository;
 
     /** @var EntityManager */
@@ -30,13 +29,12 @@ class GalleryTranslationRepository
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param ILocale $locale
      * @param Gallery|null $galleryIgnore
-     * @return boolean
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return bool
      */
-    public function isNameFree($name, ILocale $locale, Gallery $galleryIgnore = null)
+    public function isNameFree(string $name, ILocale $locale, Gallery $galleryIgnore = null): bool
     {
         $qb = $this->galleryTranslationRepository->createQueryBuilder('gt')
             ->select('gt')
@@ -62,9 +60,8 @@ class GalleryTranslationRepository
      * @param Gallery $gallery
      * @param ILocale $locale
      * @return GalleryTranslation
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getTranslation(Gallery $gallery, ILocale $locale)
+    public function getTranslation(Gallery $gallery, ILocale $locale): GalleryTranslation
     {
         $qb = $this->galleryTranslationRepository->createQueryBuilder('gt')
             ->select('gt')

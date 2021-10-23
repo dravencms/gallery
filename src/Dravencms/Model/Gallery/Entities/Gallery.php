@@ -1,16 +1,16 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Gallery\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Dravencms\Model\Locale\Entities\ILocale;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
 use Gedmo\Sortable\Sortable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping\UniqueConstraint;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
@@ -77,18 +77,18 @@ class Gallery
 
     /**
      * Gallery constructor.
-     * @param $identifier
-     * @param \DateTime $date
+     * @param string $identifier
+     * @param \DateTime|null $date
      * @param bool $isActive
      * @param bool $isShowName
      * @param bool $isInOverview
      */
     public function __construct(
-        $identifier,
+        string $identifier,
         \DateTime $date = null,
-        $isActive = true,
-        $isShowName = true,
-        $isInOverview = true
+        bool $isActive = true,
+        bool $isShowName = true,
+        bool $isInOverview = true
     )
     {
         $this->identifier = $identifier;
@@ -104,7 +104,7 @@ class Gallery
     /**
      * @param string $identifier
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier(string $identifier): void
     {
         $this->identifier = $identifier;
     }
@@ -112,7 +112,7 @@ class Gallery
     /**
      * @param \DateTime|null $date
      */
-    public function setDate(\DateTime $date = null)
+    public function setDate(\DateTime $date = null): void
     {
         $this->date = $date;
     }
@@ -120,7 +120,7 @@ class Gallery
     /**
      * @param boolean $isActive
      */
-    public function setIsActive($isActive)
+    public function setIsActive(bool $isActive): void
     {
         $this->isActive = $isActive;
     }
@@ -128,7 +128,7 @@ class Gallery
     /**
      * @param boolean $isShowName
      */
-    public function setIsShowName($isShowName)
+    public function setIsShowName(bool $isShowName): void
     {
         $this->isShowName = $isShowName;
     }
@@ -136,15 +136,15 @@ class Gallery
     /**
      * @param boolean $isInOverview
      */
-    public function setIsInOverview($isInOverview)
+    public function setIsInOverview(bool $isInOverview): void
     {
         $this->isInOverview = $isInOverview;
     }
 
     /**
-     * @param mixed $position
+     * @param int $position
      */
-    public function setPosition($position)
+    public function setPosition(int $position): void
     {
         $this->position = $position;
     }
@@ -152,7 +152,7 @@ class Gallery
     /**
      * @return boolean
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->isActive;
     }
@@ -160,7 +160,7 @@ class Gallery
     /**
      * @return boolean
      */
-    public function isShowName()
+    public function isShowName(): bool
     {
         return $this->isShowName;
     }
@@ -168,15 +168,15 @@ class Gallery
     /**
      * @return boolean
      */
-    public function isInOverview()
+    public function isInOverview(): bool
     {
         return $this->isInOverview;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -184,7 +184,7 @@ class Gallery
     /**
      * @return Picture[]|ArrayCollection
      */
-    public function getPictures()
+    public function getPictures(): Collection
     {
         return $this->pictures;
     }
@@ -192,7 +192,7 @@ class Gallery
     /**
      * @return ArrayCollection|GalleryTranslation[]
      */
-    public function getTranslations()
+    public function getTranslations(): Collection
     {
         return $this->translations;
     }
@@ -200,15 +200,15 @@ class Gallery
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
 
     /**
-     * @return \DateTime|null
+     * @return \DateTimeInterface|null
      */
-    public function getDate()
+    public function getDate(): \DateTimeInterface
     {
         return $this->date;
     }
@@ -216,7 +216,7 @@ class Gallery
     /**
      * @return ArrayCollection|\Doctrine\Common\Collections\Collection
      */
-    public function getPrimaryPicture()
+    public function getPrimaryPicture(): Collection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq("isPrimary", true));
         return $this->getPictures()->matching($criteria);
@@ -226,7 +226,7 @@ class Gallery
      * @param ILocale $locale
      * @return GalleryTranslation
      */
-    public function translate(ILocale $locale)
+    public function translate(ILocale $locale): GalleryTranslation
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq("locale", $locale));
         return $this->getTranslations()->matching($criteria)->first();

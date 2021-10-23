@@ -1,6 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
 
-declare(strict_types=1);
 
 namespace Dravencms\Gallery\Console;
 
@@ -8,9 +7,8 @@ use Dravencms\Gallery\Gallery;
 use Dravencms\Model\File\Entities\StructureFileLink;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Model\Gallery\Repository\PictureRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -20,6 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class MigrateLinkGalleryCommand extends Command
 {
+    protected static $defaultName = 'gallery:gallery:migrate-link';
+    protected static $defaultDescription = 'Migrate from direct fileStructure usage to fileStructureLink';
+
     /** @var EntityManager */
     private $entityManager;
 
@@ -27,9 +28,9 @@ class MigrateLinkGalleryCommand extends Command
     private $pictureRepository;
 
     /**
-     * CleanGalleryCommand constructor.
+     * MigrateLinkGalleryCommand constructor.
      * @param EntityManager $entityManager
-     * @param GalleryRepository $galleryRepository
+     * @param PictureRepository $pictureRepository
      */
     public function __construct(
         EntityManager $entityManager,
@@ -43,19 +44,9 @@ class MigrateLinkGalleryCommand extends Command
     }
 
     /**
-     *
-     */
-    protected function configure(): void
-    {
-        $this->setName('gallery:gallery:migrate-link')
-            ->setDescription('Migrate from direct fileStructure usage to fileStructureLink');
-    }
-
-    /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return int|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

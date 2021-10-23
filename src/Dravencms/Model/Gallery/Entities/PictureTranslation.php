@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 namespace Dravencms\Model\Gallery\Entities;
 
 use Dravencms\Model\File\Entities\StructureFile;
@@ -7,10 +7,9 @@ use Dravencms\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Translatable\Translatable;
 use Gedmo\Sortable\Sortable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Kdyby\Doctrine\Entities\Attributes\Identifier;
+use Dravencms\Database\Attributes\Identifier;
 use Nette;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
@@ -59,7 +58,7 @@ class PictureTranslation
      * @param string $name
      * @param string|null $description
      */
-    public function __construct(Picture $picture, Locale $locale, $name, $description = null)
+    public function __construct(Picture $picture, Locale $locale, string $name, string $description = null)
     {
         $this->name = $name;
         $this->description = $description;
@@ -70,7 +69,7 @@ class PictureTranslation
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -78,7 +77,7 @@ class PictureTranslation
     /**
      * @param string|null $description
      */
-    public function setDescription($description = null)
+    public function setDescription(string $description = null): void
     {
         $this->description = $description;
     }
@@ -86,7 +85,7 @@ class PictureTranslation
     /**
      * @param Picture $picture
      */
-    public function setPicture(Picture $picture)
+    public function setPicture(Picture $picture): void
     {
         $this->picture = $picture;
     }
@@ -94,7 +93,7 @@ class PictureTranslation
     /**
      * @param Locale $locale
      */
-    public function setLocale(Locale $locale)
+    public function setLocale(Locale $locale): void
     {
         $this->locale = $locale;
     }
@@ -102,7 +101,7 @@ class PictureTranslation
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -110,7 +109,7 @@ class PictureTranslation
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -118,7 +117,7 @@ class PictureTranslation
     /**
      * @return Picture
      */
-    public function getPicture()
+    public function getPicture(): Picture
     {
         return $this->picture;
     }
@@ -126,7 +125,7 @@ class PictureTranslation
     /**
      * @return Locale
      */
-    public function getLocale()
+    public function getLocale(): Locale
     {
         return $this->locale;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -27,8 +27,10 @@ use Dravencms\Components\BaseGrid\Grid;
 use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
-use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
+use Dravencms\Model\Locale\Entities\Locale;
+use Nette\Security\User;
+use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
 
 /**
  * Description of GalleryGrid
@@ -47,7 +49,10 @@ class GalleryGrid extends BaseControl
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var ILocale */
+    /** @var User */
+    private $user;
+
+    /** @var Locale */
     private $currentLocale;
 
     /**
@@ -60,30 +65,32 @@ class GalleryGrid extends BaseControl
      * @param GalleryRepository $galleryRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
+     * @param User $user
      * @param CurrentLocaleResolver $currentLocaleResolver
+     * @throws \Exception
      */
     public function __construct(
         GalleryRepository $galleryRepository, 
         BaseGridFactory $baseGridFactory, 
         EntityManager $entityManager,
+        User $user,
         CurrentLocaleResolver $currentLocaleResolver
     )
     {
-        parent::__construct();
-
         $this->baseGridFactory = $baseGridFactory;
         $this->galleryRepository = $galleryRepository;
         $this->entityManager = $entityManager;
+        $this->user = $user;
         $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
     }
 
 
     /**
-     * @param $name
+     * @param string $name
      * @return Grid
-     * @throws \Ublaboo\DataGrid\Exception\DataGridColumnNotFoundException
+     * @throws \Ublaboo\DataGrid\Exception\DataGridException
      */
-    public function createComponentGrid($name)
+    public function createComponentGrid(string $name): Grid
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
@@ -119,7 +126,7 @@ class GalleryGrid extends BaseControl
                 return $row->getPictures()->count();
             });
 
-        if ($this->presenter->isAllowed('gallery', 'edit'))
+        if ($this->user->isAllowed('gallery', 'edit'))
         {
             $grid->addAction('pictures', 'Pictures')
                 ->setIcon('folder-open')
@@ -132,13 +139,13 @@ class GalleryGrid extends BaseControl
                 ->setClass('btn btn-xs btn-primary');
         }
 
-        if ($this->presenter->isAllowed('gallery', 'delete'))
+        if ($this->user->isAllowed('gallery', 'delete'))
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirm('Do you really want to delete row %s?', 'identifier');
+                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
@@ -157,7 +164,7 @@ class GalleryGrid extends BaseControl
      * @throws \Exception
      * @isAllowed(gallery, delete)
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $galleries = $this->galleryRepository->getById($id);
         foreach ($galleries AS $gallery)
@@ -181,7 +188,7 @@ class GalleryGrid extends BaseControl
         $this->onDelete();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/GalleryGrid.latte');

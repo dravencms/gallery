@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -6,7 +6,6 @@
 namespace Dravencms\Model\Gallery\Repository;
 
 use Dravencms\Model\Gallery\Entities\Gallery;
-use Nette;
 use Salamek\Cms\CmsActionOption;
 use Salamek\Cms\ICmsComponentRepository;
 
@@ -15,6 +14,10 @@ class GalleryCmsRepository implements ICmsComponentRepository
     /** @var GalleryRepository */
     private $galleryRepository;
 
+    /**
+     * GalleryCmsRepository constructor.
+     * @param GalleryRepository $galleryRepository
+     */
     public function __construct(GalleryRepository $galleryRepository)
     {
         $this->galleryRepository = $galleryRepository;
@@ -54,7 +57,7 @@ class GalleryCmsRepository implements ICmsComponentRepository
      * @param array $parameters
      * @return null|CmsActionOption
      */
-    public function getActionOption($componentAction, array $parameters)
+    public function getActionOption(string $componentAction, array $parameters): ?CmsActionOption
     {
         /** @var Gallery $found */
         $found = $this->galleryRepository->getOneByParameters($parameters + ['isActive' => true]);

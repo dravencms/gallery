@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -36,8 +36,9 @@ use Dravencms\Model\Gallery\Repository\PictureTranslationRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Form;
+use Dravencms\Database\EntityManager;
+use Dravencms\Components\BaseForm\Form;
+use Nette\Security\User;
 use Salamek\Files\FileStorage;
 
 /**
@@ -71,6 +72,9 @@ class PictureForm extends BaseControl
     /** @var StructureRepository */
     private $structureRepository;
 
+    /** @var User */
+    private $user;
+
     /** @var Gallery */
     private $gallery;
 
@@ -94,6 +98,9 @@ class PictureForm extends BaseControl
      * @param PictureTranslationRepository $pictureTranslationRepository
      * @param TagRepository $tagRepository
      * @param StructureFileRepository $structureFileRepository
+     * @param StructureRepository $structureRepository
+     * @param FileStorage $fileStorage
+     * @param User $user
      * @param LocaleRepository $localeRepository
      * @param Gallery $gallery
      * @param File $file
@@ -108,13 +115,12 @@ class PictureForm extends BaseControl
         StructureFileRepository $structureFileRepository,
         StructureRepository $structureRepository,
         FileStorage $fileStorage,
+        User $user,
         LocaleRepository $localeRepository,
         Gallery $gallery,
         File $file,
         Picture $picture = null
     ) {
-        parent::__construct();
-
         $this->gallery = $gallery;
         $this->picture = $picture;
 
@@ -127,6 +133,7 @@ class PictureForm extends BaseControl
         $this->localeRepository = $localeRepository;
         $this->structureRepository = $structureRepository;
         $this->fileStorage = $fileStorage;
+        $this->user = $user;
         $this->file = $file;
 
 
@@ -163,7 +170,10 @@ class PictureForm extends BaseControl
         $this['form']->setDefaults($defaults);
     }
 
-    protected function createComponentForm()
+    /**
+     * @return Form
+     */
+    protected function createComponentForm(): Form
     {
         $form = $this->baseFormFactory->create();
 
@@ -182,7 +192,7 @@ class PictureForm extends BaseControl
 
 
         $form->addText('structureFile')
-            ->setType('number');
+            ->setHtmlType('number');
 
         $form->addUpload('file');
 
@@ -202,7 +212,7 @@ class PictureForm extends BaseControl
         return $form;
     }
 
-    public function editFormValidate(Form $form)
+    public function editFormValidate(Form $form): void
     {
         $values = $form->getValues();
 
@@ -216,12 +226,12 @@ class PictureForm extends BaseControl
             }
         }
 
-        if (!$this->presenter->isAllowed('gallery', 'edit')) {
+        if (!$this->user->isAllowed('gallery', 'edit')) {
             $form->addError('Nemáte oprávění editovat gallery.');
         }
     }
 
-    public function editFormSucceeded(Form $form)
+    public function editFormSucceeded(Form $form): void
     {
         $values = $form->getValues();
 
@@ -297,7 +307,7 @@ class PictureForm extends BaseControl
     }
 
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->fileSelectorPath = $this->file->getFileSelectorPath();

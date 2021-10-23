@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
@@ -28,10 +28,12 @@ use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
 use Dravencms\Model\Gallery\Repository\PictureRepository;
-use Dravencms\Model\Locale\Repository\LocaleRepository;
-use Kdyby\Doctrine\EntityManager;
+use Dravencms\Database\EntityManager;
+use Dravencms\Model\Locale\Entities\Locale;
+use Nette\Security\User;
 use Nette\Utils\Html;
 use Salamek\Files\ImagePipe;
+use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
 
 /**
  * Description of PictureGrid
@@ -49,7 +51,10 @@ class PictureGrid extends BaseControl
     /** @var EntityManager */
     private $entityManager;
 
-    /** @var CurrentLocale */
+    /** @var User */
+    private $user;
+
+    /** @var Locale */
     private $currentLocale;
 
     /** @var ImagePipe */
@@ -69,23 +74,25 @@ class PictureGrid extends BaseControl
      * @param PictureRepository $pictureRepository
      * @param BaseGridFactory $baseGridFactory
      * @param EntityManager $entityManager
+     * @param User $user
      * @param CurrentLocaleResolver $currentLocaleResolver
      * @param ImagePipe $imagePipe
+     * @throws \Exception
      */
     public function __construct(
         Gallery $gallery,
         PictureRepository $pictureRepository,
         BaseGridFactory $baseGridFactory,
         EntityManager $entityManager,
+        User $user,
         CurrentLocaleResolver $currentLocaleResolver,
         ImagePipe $imagePipe
     )
     {
-        parent::__construct();
-
         $this->baseGridFactory = $baseGridFactory;
         $this->pictureRepository = $pictureRepository;
         $this->entityManager = $entityManager;
+        $this->user = $user;
         $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
         $this->imagePipe = $imagePipe;
         $this->gallery = $gallery;
@@ -93,10 +100,11 @@ class PictureGrid extends BaseControl
 
 
     /**
-     * @param $name
-     * @return \Dravencms\Components\BaseGrid\BaseGrid
+     * @param string $name
+     * @return Grid
+     * @throws \Ublaboo\DataGrid\Exception\DataGridException
      */
-    public function createComponentGrid($name)
+    public function createComponentGrid(string $name): Grid
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
@@ -145,7 +153,7 @@ class PictureGrid extends BaseControl
             ->setAlign('center')
             ->setFilterRange();
 
-        if ($this->presenter->isAllowed('gallery', 'edit'))
+        if ($this->user->isAllowed('gallery', 'edit'))
         {
             $grid->addAction('editPicture', '', 'editPicture', ['galleryId' => 'gallery.id', 'pictureId' => 'id'])
                 ->setIcon('pencil')
@@ -153,13 +161,13 @@ class PictureGrid extends BaseControl
                 ->setClass('btn btn-xs btn-primary');
         }
 
-        if ($this->presenter->isAllowed('gallery', 'delete'))
+        if ($this->user->isAllowed('gallery', 'delete'))
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
                 ->setClass('btn btn-xs btn-danger ajax')
-                ->setConfirm('Do you really want to delete row %s?', 'identifier');
+                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
         }
@@ -177,7 +185,7 @@ class PictureGrid extends BaseControl
      * @param $id
      * @throws \Exception
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $pictures = $this->pictureRepository->getById($id);
         foreach ($pictures AS $picture)
@@ -197,7 +205,7 @@ class PictureGrid extends BaseControl
         $this->onDelete();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/PictureGrid.latte');

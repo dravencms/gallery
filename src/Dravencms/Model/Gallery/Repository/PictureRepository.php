@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -7,12 +7,12 @@ namespace Dravencms\Model\Gallery\Repository;
 
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
+
 
 class PictureRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|Picture */
     private $pictureRepository;
 
     /** @var EntityManager */
@@ -29,10 +29,10 @@ class PictureRepository
     }
 
     /**
-     * @param $id
-     * @return mixed|null|Picture
+     * @param int $id
+     * @return Picture|null
      */
-    public function getOneById(int $id)
+    public function getOneById(int $id): ?Picture
     {
         return $this->pictureRepository->find($id);
     }
@@ -56,7 +56,7 @@ class PictureRepository
 
     /**
      * @param Gallery $gallery
-     * @return \Kdyby\Doctrine\QueryBuilder
+     * @return mixed
      */
     public function getPictureQueryBuilder(Gallery $gallery)
     {
@@ -68,13 +68,12 @@ class PictureRepository
     }
 
     /**
-     * @param $identifier
+     * @param string $identifier
      * @param Gallery $gallery
      * @param Picture|null $pictureIgnore
-     * @return mixed
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return bool
      */
-    public function isIdentifierFree(string $identifier, Gallery $gallery, Picture $pictureIgnore = null)
+    public function isIdentifierFree(string $identifier, Gallery $gallery, Picture $pictureIgnore = null): bool
     {
         $qb = $this->pictureRepository->createQueryBuilder('p')
             ->select('p')

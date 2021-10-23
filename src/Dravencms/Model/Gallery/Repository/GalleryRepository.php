@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -6,12 +6,12 @@
 namespace Dravencms\Model\Gallery\Repository;
 
 use Dravencms\Model\Gallery\Entities\Gallery;
-use Kdyby\Doctrine\EntityManager;
-use Nette;
+use Dravencms\Database\EntityManager;
+
 
 class GalleryRepository
 {
-    /** @var \Kdyby\Doctrine\EntityRepository */
+    /** @var \Doctrine\Persistence\ObjectRepository|Gallery */
     private $galleryRepository;
 
     /** @var EntityManager */
@@ -28,10 +28,10 @@ class GalleryRepository
     }
 
     /**
-     * @param $id
-     * @return mixed|null|Gallery
+     * @param int $id
+     * @return Gallery|null
      */
-    public function getOneById($id)
+    public function getOneById(int $id): ?Gallery
     {
         return $this->galleryRepository->find($id);
     }
@@ -49,13 +49,13 @@ class GalleryRepository
      * @param bool $isInOverview
      * @return Gallery[]
      */
-    public function getByInOverview($isInOverview = true)
+    public function getByInOverview(bool $isInOverview = true)
     {
         return $this->galleryRepository->findBy(['isInOverview' => $isInOverview]);
     }
 
     /**
-     * @return \Kdyby\Doctrine\QueryBuilder
+     * @return mixed
      */
     public function getGalleryQueryBuilder()
     {
@@ -73,12 +73,11 @@ class GalleryRepository
     }
 
     /**
-     * @param $identifier
+     * @param string $identifier
      * @param Gallery|null $galleryIgnore
-     * @return mixed
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return bool
      */
-    public function isIdentifierFree($identifier, Gallery $galleryIgnore = null)
+    public function isIdentifierFree(string $identifier, Gallery $galleryIgnore = null): bool
     {
         $qb = $this->galleryRepository->createQueryBuilder('g')
             ->select('g')
@@ -101,7 +100,7 @@ class GalleryRepository
      * @param array $parameters
      * @return Gallery|null
      */
-    public function getOneByParameters(array $parameters)
+    public function getOneByParameters(array $parameters): ?Gallery
     {
         return $this->galleryRepository->findOneBy($parameters);
     }
@@ -134,9 +133,8 @@ class GalleryRepository
     /**
      * @param $slug
      * @return Gallery|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getOneBySlug($slug)
+    public function getOneBySlug($slug): ?Gallery
     {
         return $this->galleryRepository->createQueryBuilder('g')
             ->select('g')

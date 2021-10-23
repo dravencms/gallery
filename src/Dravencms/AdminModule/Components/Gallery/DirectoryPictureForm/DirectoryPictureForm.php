@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -33,8 +33,9 @@ use Dravencms\Model\Gallery\Repository\PictureTranslationRepository;
 use Dravencms\Model\Locale\Repository\LocaleRepository;
 use Dravencms\Model\Tag\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Application\UI\Form;
+use Dravencms\Database\EntityManager;
+use Dravencms\Components\BaseForm\Form;
+use Nette\Security\User;
 use Salamek\Files\Models\IFile;
 
 /**
@@ -68,6 +69,9 @@ class DirectoryPictureForm extends BaseControl
     /** @var LocaleRepository */
     private $localeRepository;
 
+    /** @var User */
+    private $user;
+
     /** @var Gallery */
     private $gallery;
 
@@ -84,6 +88,7 @@ class DirectoryPictureForm extends BaseControl
      * @param StructureFileRepository $structureFileRepository
      * @param StructureRepository $structureRepository
      * @param LocaleRepository $localeRepository
+     * @param User $user
      * @param Gallery $gallery
      */
     public function __construct(
@@ -95,10 +100,9 @@ class DirectoryPictureForm extends BaseControl
         StructureFileRepository $structureFileRepository,
         StructureRepository $structureRepository,
         LocaleRepository $localeRepository,
+        User $user,
         Gallery $gallery
     ) {
-        parent::__construct();
-
         $this->gallery = $gallery;
 
         $this->baseFormFactory = $baseFormFactory;
@@ -109,6 +113,7 @@ class DirectoryPictureForm extends BaseControl
         $this->pictureTranslationRepository = $pictureTranslationRepository;
         $this->structureRepository = $structureRepository;
         $this->localeRepository = $localeRepository;
+        $this->user = $user;
 
         $this['form']->setDefaults(['isActive' => true]);
     }
@@ -116,7 +121,7 @@ class DirectoryPictureForm extends BaseControl
     /**
      * @return array
      */
-    private function buildPaths()
+    private function buildPaths(): array
     {
         $return = [];
         foreach ($this->structureRepository->getAll() AS $item)
@@ -134,7 +139,10 @@ class DirectoryPictureForm extends BaseControl
         return $return;
     }
 
-    protected function createComponentForm()
+    /**
+     * @return Form
+     */
+    protected function createComponentForm(): Form
     {
         $form = $this->baseFormFactory->create();
 
@@ -152,15 +160,14 @@ class DirectoryPictureForm extends BaseControl
         return $form;
     }
 
-    public function editFormValidate(Form $form)
+    public function editFormValidate(Form $form): void
     {
-        $values = $form->getValues();
-        if (!$this->presenter->isAllowed('gallery', 'edit')) {
+        if (!$this->user->isAllowed('gallery', 'edit')) {
             $form->addError('Nemáte oprávění editovat gallery.');
         }
     }
 
-    public function editFormSucceeded(Form $form)
+    public function editFormSucceeded(Form $form): void
     {
         $values = $form->getValues();
 
@@ -210,7 +217,7 @@ class DirectoryPictureForm extends BaseControl
     }
 
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/DirectoryPictureForm.latte');

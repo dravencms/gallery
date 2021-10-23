@@ -15,10 +15,12 @@
     }
   ],
   "require": {
-    "dravencms/admin": ">=1.0",
-    "dravencms/tag": ">=1.0",
-    "dravencms/file": ">=1.1.6",
-    "dravencms/structure": ">=1.0"
+    "dravencms/admin": ">=2.0",
+    "dravencms/tag": ">=2.0",
+    "dravencms/file": ">=2.0"
+  },
+  "suggest": {
+    "dravencms/structure": "Allows gallery components to be used in cms"
   },
   "require-dev": {
     "nette/tester": "@dev"
@@ -30,16 +32,7 @@
   },
   "extra": {
     "dravencms": {
-      "configuration": {
-        "extensions": {
-          "gallery": "Dravencms\\Gallery\\DI\\GalleryExtension"
-        },
-        "doctrine":{
-          "metadata": {
-            "Dravencms\\Model\\Gallery": "%appDir%/../vendor/dravencms/gallery/src/Dravencms/Model/Gallery"
-          }
-        }
-      }
+      "configuration": "dravencms.config.neon"
     }
   }
 }

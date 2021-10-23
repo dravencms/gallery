@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /**
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  */
@@ -8,7 +8,7 @@ namespace Dravencms\Model\Gallery\Fixtures;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Dravencms\Model\Admin\Entities\Menu;
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInterface
 {
@@ -17,7 +17,7 @@ class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInter
      *
      * @param ObjectManager $manager
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $menu = $manager->getRepository(Menu::class);
 
@@ -36,9 +36,9 @@ class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInter
     /**
      * Get the order of this fixture
      *
-     * @return integer
+     * @return array
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return ['Dravencms\Model\Gallery\Fixtures\AclOperationFixtures', 'Dravencms\Model\Structure\Fixtures\AdminMenuFixtures'];
     }

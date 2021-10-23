@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 /*
  * Copyright (C) 2016 Adam Schubert <adam.schubert@sg1-game.net>.
  *
@@ -28,5 +28,5 @@ interface DirectoryPictureFormFactory
      * @param Gallery $gallery
      * @return DirectoryPictureForm
      */
-    public function create(Gallery $gallery);
+    public function create(Gallery $gallery): DirectoryPictureForm;
 }
