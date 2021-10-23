@@ -288,9 +288,9 @@ class Picture
 
     /**
      * @param ILocale $locale
-     * @return GalleryTranslation
+     * @return PictureTranslation
      */
-    public function translate(ILocale $locale): GalleryTranslation
+    public function translate(ILocale $locale): PictureTranslation
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq("locale", $locale));
         return $this->getTranslations()->matching($criteria)->first();
