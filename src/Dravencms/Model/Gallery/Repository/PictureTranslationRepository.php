@@ -65,9 +65,9 @@ class PictureTranslationRepository
     /**
      * @param Picture $picture
      * @param ILocale $locale
-     * @return PictureTranslation
+     * @return PictureTranslation|null
      */
-    public function getTranslation(Picture $picture, ILocale $locale): PictureTranslation
+    public function getTranslation(Picture $picture, ILocale $locale): ?PictureTranslation
     {
         $qb = $this->pictureTranslationRepository->createQueryBuilder('pt')
             ->select('pt')

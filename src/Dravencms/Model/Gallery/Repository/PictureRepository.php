@@ -41,7 +41,7 @@ class PictureRepository
      * @param $id
      * @return Picture[]
      */
-    public function getById(int $id)
+    public function getById($id)
     {
         return $this->pictureRepository->findBy(['id' => $id]);
     }
