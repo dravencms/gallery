@@ -238,7 +238,7 @@ class PictureForm extends BaseControl
         $tags = new ArrayCollection($this->tagRepository->getById($values->tags));
 
         if ($values->structureFile) {
-            $structureFile = $this->structureFileRepository->getOneById($values->structureFile);
+            $structureFile = $this->structureFileRepository->getOneById(intval($values->structureFile));
         } else {
             $structureFile = null;
         }
