@@ -254,7 +254,7 @@ class PictureForm extends BaseControl
             $picture->setIdentifier($values->identifier);
             $picture->setIsActive($values->isActive);
             $picture->setIsPrimary($values->isPrimary);
-            $picture->setPosition($values->position);
+            $picture->setPosition(intval($values->position));
 
             if ($picture->getStructureFileLink()) {
                 $existingStructureFile = $picture->getStructureFileLink();
