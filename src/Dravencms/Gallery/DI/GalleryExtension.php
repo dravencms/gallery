@@ -13,7 +13,7 @@ use Salamek\Cms\DI\CmsExtension;
 class GalleryExtension extends CompilerExtension
 {
 
-    public function loadConfiguration()
+    public function loadConfiguration(): void
     {
         $builder = $this->getContainerBuilder();
 
@@ -31,7 +31,7 @@ class GalleryExtension extends CompilerExtension
     }
 
 
-    protected function loadCmsComponents()
+    protected function loadCmsComponents(): void
     {
         $builder = $this->getContainerBuilder();
         foreach ($this->loadFromFile(__DIR__ . '/cmsComponents.neon') as $i => $command) {
