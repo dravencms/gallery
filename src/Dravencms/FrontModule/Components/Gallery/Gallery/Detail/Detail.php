@@ -8,8 +8,8 @@ use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Model\Gallery\Repository\GalleryTranslationRepository;
 use Dravencms\Model\Gallery\Repository\PictureTranslationRepository;
 use Dravencms\Model\Locale\Entities\Locale;
-use Salamek\Cms\ICmsActionOption;
-use Salamek\Cms\ICmsComponent;
+use Dravencms\Structure\ICmsActionOption;
+use Dravencms\Structure\ICmsComponent;
 
 /**
  * Homepage presenter.

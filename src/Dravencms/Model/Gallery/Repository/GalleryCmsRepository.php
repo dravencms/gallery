@@ -6,8 +6,8 @@
 namespace Dravencms\Model\Gallery\Repository;
 
 use Dravencms\Model\Gallery\Entities\Gallery;
-use Salamek\Cms\CmsActionOption;
-use Salamek\Cms\ICmsComponentRepository;
+use Dravencms\Structure\CmsActionOption;
+use Dravencms\Structure\ICmsComponentRepository;
 
 class GalleryCmsRepository implements ICmsComponentRepository
 {

@@ -19,7 +19,7 @@
  */
 namespace Dravencms\FrontModule\Components\Gallery\Gallery\Overview;
 
-use Salamek\Cms\ICmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
 
 interface OverviewFactory
 {

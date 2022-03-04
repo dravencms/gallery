@@ -7,7 +7,7 @@ use Dravencms\Locale\CurrentLocaleResolver;
 use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Model\Gallery\Repository\GalleryTranslationRepository;
 use Dravencms\Model\Locale\Entities\Locale;
-use Salamek\Cms\ICmsActionOption;
+use Dravencms\Structure\ICmsActionOption;
 
 /**
  * Homepage presenter.
