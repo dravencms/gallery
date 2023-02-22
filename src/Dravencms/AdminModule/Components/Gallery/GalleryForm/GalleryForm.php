@@ -148,7 +148,7 @@ class GalleryForm extends BaseControl
         $form->addText('identifier')
             ->setRequired('Please enter identifier');
 
-        $form->addText('position')
+        $form->addInteger('position')
             ->setDisabled(is_null($this->gallery));
 
         $form->addCheckbox('isActive');
@@ -205,7 +205,7 @@ class GalleryForm extends BaseControl
             $gallery->setIsInOverview($values->isInOverview);
             $gallery->setIsShowName($values->isShowName);
             if ($values->position) {
-                $gallery->setPosition(intval($values->position));
+                $gallery->setPosition($values->position);
             }
             $gallery->setDate($date);
         } else {
