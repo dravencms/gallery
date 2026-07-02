@@ -1,7 +1,17 @@
 extensions:
     dravencms.gallery: Dravencms\Gallery\DI\GalleryExtension
 
+services:
+    gallery.galleryPresenter:
+        class: Dravencms\AdminModule\GalleryModule\GalleryPresenter
 
-nettrine.orm.annotations:
-    mapping:
-        Dravencms\Model\Gallery: %appDir%/../vendor/dravencms/gallery/src/Dravencms/Model/Gallery/Entities
+
+nettrine.orm:
+    managers:
+        default:
+            mapping:
+                DravencmsGallery:
+                    type: attributes
+                    directories:
+                        - %appDir%/../vendor/dravencms/gallery/src/Dravencms/Model/Gallery/Entities
+                    namespace: Dravencms\Model\Gallery
