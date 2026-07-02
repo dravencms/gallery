@@ -7,7 +7,7 @@
     "gallery"
   ],
   "license": [
-    "LGPL-3.0"
+    "LGPL-3.0-only"
   ],
   "authors": [
     {
@@ -15,9 +15,9 @@
     }
   ],
   "require": {
-    "dravencms/admin": ">=2.0",
-    "dravencms/tag": ">=2.0",
-    "dravencms/file": ">=2.0"
+    "dravencms/admin": "^2.3",
+    "dravencms/tag": "^2.0",
+    "dravencms/file": "^2.1"
   },
   "suggest": {
     "dravencms/structure": "Allows gallery components to be used in cms"

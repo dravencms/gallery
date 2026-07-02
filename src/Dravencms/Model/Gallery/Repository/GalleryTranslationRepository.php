@@ -34,17 +34,15 @@ class GalleryTranslationRepository
      * @param Gallery|null $galleryIgnore
      * @return bool
      */
-    public function isNameFree(string $name, ILocale $locale, Gallery $galleryIgnore = null): bool
+    public function isNameFree(string $name, ILocale $locale, ?Gallery $galleryIgnore = null): bool
     {
         $qb = $this->galleryTranslationRepository->createQueryBuilder('gt')
             ->select('gt')
             ->join('gt.gallery', 'g')
             ->where('gt.name = :name')
             ->andWhere('gt.locale = :locale')
-            ->setParameters([
-                'name' => $name,
-                'locale' => $locale
-            ]);
+            ->setParameter('name', $name)
+            ->setParameter('locale', $locale);
 
         if ($galleryIgnore)
         {
@@ -67,10 +65,8 @@ class GalleryTranslationRepository
             ->select('gt')
             ->where('gt.locale = :locale')
             ->andWhere('gt.gallery = :gallery')
-            ->setParameters([
-                'gallery' => $gallery,
-                'locale' => $locale
-            ]);
+            ->setParameter('gallery', $gallery)
+            ->setParameter('locale', $locale);
         return $qb->getQuery()->getOneOrNullResult();
     }
 }

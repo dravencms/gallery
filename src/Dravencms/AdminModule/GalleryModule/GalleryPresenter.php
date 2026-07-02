@@ -74,7 +74,7 @@ class GalleryPresenter extends SecuredPresenter
      * @param $id
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEdit(int $id = null): void
+    public function actionEdit(?int $id = null): void
     {
         if ($id) {
             $this->template->h1 = 'Edit gallery';
@@ -93,7 +93,7 @@ class GalleryPresenter extends SecuredPresenter
      * @param int|null $pictureId
      * @throws \Nette\Application\BadRequestException
      */
-    public function actionEditPicture(int $galleryId, int $pictureId = null)
+    public function actionEditPicture(int $galleryId, ?int $pictureId = null)
     {
         $this->gallery = $this->galleryRepository->getOneById($galleryId);
         if ($pictureId)

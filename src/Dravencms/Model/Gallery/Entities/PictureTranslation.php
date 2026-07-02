@@ -6,19 +6,16 @@ use Dravencms\Model\Locale\Entities\Locale;
 use Dravencms\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Sortable\Sortable;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Nette;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Class PictureTranslation
  * @package App\Model\Gallery\Entities
- * @ORM\Entity
- * @ORM\Table(name="galleryPictureTranslation", uniqueConstraints={@UniqueConstraint(name="picture_translation_name_unique", columns={"picture_id", "locale_id", "name"})})
  */
+#[ORM\Entity]
+#[ORM\Table(name: "galleryPictureTranslation", uniqueConstraints: [new ORM\UniqueConstraint(name: "picture_translation_name_unique", columns: ["picture_id", "locale_id", "name"])])]
 class PictureTranslation
 {
     use Nette\SmartObject;
@@ -27,28 +24,28 @@ class PictureTranslation
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false)
      */
+    #[ORM\Column(type: "string", length: 255, nullable: false)]
     private $name;
 
     /**
      * @var string
-     * @ORM\Column(type="text",nullable=true)
      */
+    #[ORM\Column(type: "text", nullable: true)]
     private $description;
 
     /**
      * @var Picture
-     * @ORM\ManyToOne(targetEntity="Picture", inversedBy="translations")
-     * @ORM\JoinColumn(name="picture_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Picture", inversedBy: "translations")]
+    #[ORM\JoinColumn(name: "picture_id", referencedColumnName: "id")]
     private $picture;
 
     /**
      * @var Locale
-     * @ORM\ManyToOne(targetEntity="Dravencms\Model\Locale\Entities\Locale")
-     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "Dravencms\Model\Locale\Entities\Locale")]
+    #[ORM\JoinColumn(name: "locale_id", referencedColumnName: "id")]
     private $locale;
 
     /**
@@ -58,7 +55,7 @@ class PictureTranslation
      * @param string $name
      * @param string|null $description
      */
-    public function __construct(Picture $picture, Locale $locale, string $name, string $description = null)
+    public function __construct(Picture $picture, Locale $locale, string $name, ?string $description = null)
     {
         $this->name = $name;
         $this->description = $description;
@@ -77,7 +74,7 @@ class PictureTranslation
     /**
      * @param string|null $description
      */
-    public function setDescription(string $description = null): void
+    public function setDescription(?string $description = null): void
     {
         $this->description = $description;
     }
@@ -132,4 +129,3 @@ class PictureTranslation
 
 
 }
-

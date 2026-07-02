@@ -119,7 +119,7 @@ class PictureForm extends BaseControl
         LocaleRepository $localeRepository,
         Gallery $gallery,
         File $file,
-        Picture $picture = null
+        ?Picture $picture = null
     ) {
         $this->gallery = $gallery;
         $this->picture = $picture;
@@ -136,38 +136,6 @@ class PictureForm extends BaseControl
         $this->user = $user;
         $this->file = $file;
 
-
-        if ($this->picture) {
-
-            $tags = [];
-            foreach($this->picture->getTags() AS $tag)
-            {
-                $tags[$tag->getId()] = $tag->getId();
-            }
-
-            $defaults = [
-                'position' => $this->picture->getPosition(),
-                'identifier' => $this->picture->getIdentifier(),
-                'isActive' => $this->picture->isActive(),
-                'isPrimary' => $this->picture->isPrimary(),
-                'structureFile' => $this->picture->getStructureFile()->getId(),
-                'tags' => $tags
-            ];
-
-            foreach ($this->picture->getTranslations() AS $translation)
-            {
-                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
-                $defaults[$translation->getLocale()->getLanguageCode()]['description'] = $translation->getDescription();
-            }
-
-        }
-        else{
-            $defaults = [
-                'isActive' => true
-            ];
-        }
-
-        $this['form']->setDefaults($defaults);
     }
 
     /**
@@ -208,6 +176,38 @@ class PictureForm extends BaseControl
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        if ($this->picture) {
+
+            $tags = [];
+            foreach($this->picture->getTags() as $tag)
+            {
+                $tags[$tag->getId()] = $tag->getId();
+            }
+
+            $defaults = [
+                'position' => $this->picture->getPosition(),
+                'identifier' => $this->picture->getIdentifier(),
+                'isActive' => $this->picture->isActive(),
+                'isPrimary' => $this->picture->isPrimary(),
+                'structureFile' => $this->picture->getStructureFile()->getId(),
+                'tags' => $tags
+            ];
+
+            foreach ($this->picture->getTranslations() as $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+                $defaults[$translation->getLocale()->getLanguageCode()]['description'] = $translation->getDescription();
+            }
+
+        }
+        else{
+            $defaults = [
+                'isActive' => true
+            ];
+        }
+
+        $form->setDefaults($defaults);
 
         return $form;
     }

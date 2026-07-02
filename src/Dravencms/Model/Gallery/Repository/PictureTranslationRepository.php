@@ -37,7 +37,7 @@ class PictureTranslationRepository
      * @param Picture|null $pictureIgnore
      * @return bool
      */
-    public function isNameFree(string $name, ILocale $locale, Gallery $gallery, Picture $pictureIgnore = null): bool
+    public function isNameFree(string $name, ILocale $locale, Gallery $gallery, ?Picture $pictureIgnore = null): bool
     {
         $qb = $this->pictureTranslationRepository->createQueryBuilder('pt')
             ->select('pt')
@@ -45,11 +45,9 @@ class PictureTranslationRepository
             ->where('pt.name = :name')
             ->andWhere('p.gallery = :gallery')
             ->andWhere('pt.locale = :locale')
-            ->setParameters([
-                'name' => $name,
-                'gallery' => $gallery,
-                'locale' => $locale
-            ]);
+            ->setParameter('name', $name)
+            ->setParameter('gallery', $gallery)
+            ->setParameter('locale', $locale);
 
         if ($pictureIgnore)
         {
@@ -73,10 +71,8 @@ class PictureTranslationRepository
             ->select('pt')
             ->where('pt.locale = :locale')
             ->andWhere('pt.picture = :picture')
-            ->setParameters([
-                'picture' => $picture,
-                'locale' => $locale
-            ]);
+            ->setParameter('picture', $picture)
+            ->setParameter('locale', $locale);
         return $qb->getQuery()->getOneOrNullResult();
     }
 }

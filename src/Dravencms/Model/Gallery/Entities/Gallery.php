@@ -5,20 +5,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Dravencms\Model\Locale\Entities\ILocale;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Sortable\Sortable;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
  * Class Gallery
  * @package App\Model\Gallery\Entities
- * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
- * @ORM\Table(name="galleryGallery")
  */
+#[ORM\Entity(repositoryClass: "Gedmo\Sortable\Entity\Repository\SortableRepository")]
+#[ORM\Table(name: "galleryGallery")]
 class Gallery
 {
     use Nette\SmartObject;
@@ -27,52 +25,52 @@ class Gallery
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false, unique=true)
      */
+    #[ORM\Column(type: "string", length: 255, nullable: false, unique: true)]
     private $identifier;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isActive;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isShowName;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isInOverview;
 
     /**
      * @var integer
-     * @Gedmo\SortablePosition
-     * @ORM\Column(type="integer")
      */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(type: "integer")]
     private $position;
 
     /**
      * @var \DateTime
-     * @ORM\Column(type="datetime", nullable=true)
      */
+    #[ORM\Column(type: "datetime", nullable: true)]
     private $date;
 
     /**
      * @var ArrayCollection|Picture[]
-     * @ORM\OneToMany(targetEntity="Picture", mappedBy="gallery",cascade={"persist"})
-     * @ORM\OrderBy({"position" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: "Picture", mappedBy: "gallery", cascade: ["persist"])]
+    #[ORM\OrderBy(["position" => "ASC"])]
     private $pictures;
 
     /**
      * @var ArrayCollection|GalleryTranslation[]
-     * @ORM\OneToMany(targetEntity="GalleryTranslation", mappedBy="gallery",cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: "GalleryTranslation", mappedBy: "gallery", cascade: ["persist", "remove"])]
     private $translations;
 
     /**
@@ -85,7 +83,7 @@ class Gallery
      */
     public function __construct(
         string $identifier,
-        \DateTime $date = null,
+        ?\DateTime $date = null,
         bool $isActive = true,
         bool $isShowName = true,
         bool $isInOverview = true
@@ -112,7 +110,7 @@ class Gallery
     /**
      * @param \DateTime|null $date
      */
-    public function setDate(\DateTime $date = null): void
+    public function setDate(?\DateTime $date = null): void
     {
         $this->date = $date;
     }
@@ -232,4 +230,3 @@ class Gallery
         return $this->getTranslations()->matching($criteria)->first();
     }
 }
-

@@ -30,5 +30,5 @@ interface PictureFormFactory
      * @param Picture|null $picture
      * @return PictureForm
      */
-    public function create(Gallery $gallery, Picture $picture = null): PictureForm;
+    public function create(Gallery $gallery, ?Picture $picture = null): PictureForm;
 }

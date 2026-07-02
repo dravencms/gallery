@@ -77,14 +77,12 @@ class GalleryRepository
      * @param Gallery|null $galleryIgnore
      * @return bool
      */
-    public function isIdentifierFree(string $identifier, Gallery $galleryIgnore = null): bool
+    public function isIdentifierFree(string $identifier, ?Gallery $galleryIgnore = null): bool
     {
         $qb = $this->galleryRepository->createQueryBuilder('g')
             ->select('g')
             ->where('g.identifier = :identifier')
-            ->setParameters([
-                'identifier' => $identifier
-            ]);
+            ->setParameter('identifier', $identifier);
 
         if ($galleryIgnore)
         {
@@ -140,9 +138,7 @@ class GalleryRepository
             ->select('g')
             ->join('g.translations', 'gt')
             ->where('gt.slug = :slug')
-            ->setParameters([
-                'slug' => $slug
-            ])
+            ->setParameter('slug', $slug)
             ->getQuery()
             ->getOneOrNullResult();
     }

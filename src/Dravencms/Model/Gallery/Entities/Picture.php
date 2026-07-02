@@ -9,18 +9,17 @@ use Dravencms\Model\Locale\Entities\ILocale;
 use Dravencms\Model\Tag\Entities\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Dravencms\Database\Attributes\TimestampableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Sortable\Sortable;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Dravencms\Database\Attributes\Identifier;
 use Nette;
 
 /**
  * Class Picture
  * @package App\Model\Gallery\Entities
- * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
- * @ORM\Table(name="galleryPicture")
  */
+#[ORM\Entity(repositoryClass: "Gedmo\Sortable\Entity\Repository\SortableRepository")]
+#[ORM\Table(name: "galleryPicture")]
 class Picture
 {
     use Nette\SmartObject;
@@ -29,71 +28,66 @@ class Picture
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255,nullable=false,unique=true)
      */
+    #[ORM\Column(type: "string", length: 255, nullable: false, unique: true)]
     private $identifier;
 
     /**
      * @var integer
-     * @Gedmo\SortablePosition
-     * @ORM\Column(type="integer")
      */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(type: "integer")]
     private $position;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isActive;
 
     /**
      * @var boolean
-     * @ORM\Column(type="boolean", nullable=false)
      */
+    #[ORM\Column(type: "boolean", nullable: false)]
     private $isPrimary;
 
     /**
      * @var StructureFile
-     * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFile")
-     * @ORM\JoinColumn(name="structure_file_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "\Dravencms\Model\File\Entities\StructureFile")]
+    #[ORM\JoinColumn(name: "structure_file_id", referencedColumnName: "id")]
     private $structureFile;
 
     /**
      * @var StructureFileLink
-     * @ORM\ManyToOne(targetEntity="\Dravencms\Model\File\Entities\StructureFileLink")
-     * @ORM\JoinColumn(name="structure_file_link_id", referencedColumnName="id")
      */
+    #[ORM\ManyToOne(targetEntity: "\Dravencms\Model\File\Entities\StructureFileLink")]
+    #[ORM\JoinColumn(name: "structure_file_link_id", referencedColumnName: "id")]
     private $structureFileLink;
 
     /**
      * @var Gallery
-     * @Gedmo\SortableGroup
-     * @ORM\ManyToOne(targetEntity="Gallery", inversedBy="pictures")
-     * @ORM\JoinColumn(name="gallery_id", referencedColumnName="id")
      */
+    #[Gedmo\SortableGroup]
+    #[ORM\ManyToOne(targetEntity: "Gallery", inversedBy: "pictures")]
+    #[ORM\JoinColumn(name: "gallery_id", referencedColumnName: "id")]
     private $gallery;
 
     /**
      * @var \Doctrine\Common\Collections\Collection|Tag[]
-     *
-     * @ORM\ManyToMany(targetEntity="\Dravencms\Model\Tag\Entities\Tag")
-     * @ORM\JoinTable(
-     *  name="picture_tag",
-     *  joinColumns={
-     *      @ORM\JoinColumn(name="article_id", referencedColumnName="id")
-     *  },
-     *  inverseJoinColumns={
-     *      @ORM\JoinColumn(name="tag_id", referencedColumnName="id")
-     *  }
-     * )
      */
+    #[ORM\ManyToMany(targetEntity: "\Dravencms\Model\Tag\Entities\Tag")]
+    #[ORM\JoinTable(
+        name: "picture_tag",
+        joinColumns: [new ORM\JoinColumn(name: "article_id", referencedColumnName: "id")],
+        inverseJoinColumns: [new ORM\JoinColumn(name: "tag_id", referencedColumnName: "id")]
+    )]
     private $tags;
 
     /**
      * @var ArrayCollection|PictureTranslation[]
-     * @ORM\OneToMany(targetEntity="PictureTranslation", mappedBy="picture",cascade={"persist", "remove"})
      */
+    #[ORM\OneToMany(targetEntity: "PictureTranslation", mappedBy: "picture", cascade: ["persist", "remove"])]
     private $translations;
 
     /**
@@ -143,7 +137,7 @@ class Picture
     /**
      * @param StructureFile $structureFile
      */
-    public function setStructureFile(StructureFile $structureFile = null): void
+    public function setStructureFile(?StructureFile $structureFile = null): void
     {
         $this->structureFile = $structureFile;
     }
@@ -296,4 +290,3 @@ class Picture
         return $this->getTranslations()->matching($criteria)->first();
     }
 }
-

@@ -73,16 +73,14 @@ class PictureRepository
      * @param Picture|null $pictureIgnore
      * @return bool
      */
-    public function isIdentifierFree(string $identifier, Gallery $gallery, Picture $pictureIgnore = null): bool
+    public function isIdentifierFree(string $identifier, Gallery $gallery, ?Picture $pictureIgnore = null): bool
     {
         $qb = $this->pictureRepository->createQueryBuilder('p')
             ->select('p')
             ->where('p.identifier = :identifier')
             ->andWhere('p.gallery = :gallery')
-            ->setParameters([
-                'identifier' => $identifier,
-                'gallery' => $gallery
-            ]);
+            ->setParameter('identifier', $identifier)
+            ->setParameter('gallery', $gallery);
 
         if ($pictureIgnore)
         {

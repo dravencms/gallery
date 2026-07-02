@@ -114,8 +114,6 @@ class DirectoryPictureForm extends BaseControl
         $this->structureRepository = $structureRepository;
         $this->localeRepository = $localeRepository;
         $this->user = $user;
-
-        $this['form']->setDefaults(['isActive' => true]);
     }
 
     /**
@@ -156,6 +154,8 @@ class DirectoryPictureForm extends BaseControl
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        $form->setDefaults(['isActive' => true]);
 
         return $form;
     }

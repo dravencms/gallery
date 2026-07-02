@@ -28,5 +28,5 @@ interface GalleryFormFactory
      * @param Gallery|null $gallery
      * @return GalleryForm
      */
-    public function create(Gallery $gallery = null): GalleryForm;
+    public function create(?Gallery $gallery = null): GalleryForm;
 }

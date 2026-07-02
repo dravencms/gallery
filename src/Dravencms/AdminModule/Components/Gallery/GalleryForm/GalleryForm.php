@@ -86,7 +86,7 @@ class GalleryForm extends BaseControl
         LocaleRepository $localeRepository,
         CurrentLocaleResolver $currentLocaleResolver,
         User $user,
-        Gallery $gallery = null
+        ?Gallery $gallery = null
     ) {
 
         $this->gallery = $gallery;
@@ -99,32 +99,6 @@ class GalleryForm extends BaseControl
         $this->currentLocale = $currentLocaleResolver->getCurrentLocale();
         $this->localeRepository = $localeRepository;
 
-
-        if ($this->gallery) {
-            $defaults = [
-                'position' => $this->gallery->getPosition(),
-                'identifier' => $this->gallery->getIdentifier(),
-                'isActive' => $this->gallery->isActive(),
-                'isInOverview' => $this->gallery->isInOverview(),
-                'isShowName' => $this->gallery->isShowName(),
-                'date' => ($this->gallery->getDate() ? $this->gallery->getDate()->format($this->currentLocale->getDateFormat()) : null),
-            ];
-
-            foreach ($this->gallery->getTranslations() AS $translation)
-            {
-                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
-                $defaults[$translation->getLocale()->getLanguageCode()]['description'] = $translation->getDescription();
-            }
-        }
-        else{
-            $defaults = [
-                'isActive' => true,
-                'isShowName' => false,
-                'isInOverview' => true
-            ];
-        }
-
-        $this['form']->setDefaults($defaults);
     }
 
     /**
@@ -160,6 +134,32 @@ class GalleryForm extends BaseControl
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
+
+        if ($this->gallery) {
+            $defaults = [
+                'position' => $this->gallery->getPosition(),
+                'identifier' => $this->gallery->getIdentifier(),
+                'isActive' => $this->gallery->isActive(),
+                'isInOverview' => $this->gallery->isInOverview(),
+                'isShowName' => $this->gallery->isShowName(),
+                'date' => ($this->gallery->getDate() ? $this->gallery->getDate()->format($this->currentLocale->getDateFormat()) : null),
+            ];
+
+            foreach ($this->gallery->getTranslations() as $translation)
+            {
+                $defaults[$translation->getLocale()->getLanguageCode()]['name'] = $translation->getName();
+                $defaults[$translation->getLocale()->getLanguageCode()]['description'] = $translation->getDescription();
+            }
+        }
+        else{
+            $defaults = [
+                'isActive' => true,
+                'isShowName' => false,
+                'isInOverview' => true
+            ];
+        }
+
+        $form->setDefaults($defaults);
 
         return $form;
     }
