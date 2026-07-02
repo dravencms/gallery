@@ -30,7 +30,7 @@ use Dravencms\Model\Gallery\Repository\GalleryRepository;
 use Dravencms\Database\EntityManager;
 use Dravencms\Model\Locale\Entities\Locale;
 use Nette\Security\User;
-use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
+use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
 
 /**
  * Description of GalleryGrid

@@ -33,7 +33,7 @@ use Dravencms\Model\Locale\Entities\Locale;
 use Nette\Security\User;
 use Nette\Utils\Html;
 use Salamek\Files\ImagePipe;
-use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
+use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
 
 /**
  * Description of PictureGrid
