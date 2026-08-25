@@ -21,7 +21,7 @@ class AdminMenuFixtures extends AbstractFixture implements DependentFixtureInter
     {
         $menu = $manager->getRepository(Menu::class);
 
-        $adminMenu = new Menu('Gallery', ':Admin:Gallery:Gallery', 'fa-picture-o', $this->getReference('user-acl-operation-gallery-edit'));
+        $adminMenu = new Menu('Gallery', ':Admin:Gallery:Gallery', 'fa-picture-o', $this->getReference('user-acl-operation-gallery-edit', \Dravencms\Model\User\Entities\AclOperation::class));
 
         if ($parent = $menu->findOneBy(['name' => 'Site items']))
         {
