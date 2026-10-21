@@ -88,7 +88,7 @@ class GalleryGrid extends BaseControl
     /**
      * @param string $name
      * @return Grid
-     * @throws \Ublaboo\DataGrid\Exception\DataGridException
+     * @throws \Contributte\Datagrid\Exception\DataGridException
      */
     public function createComponentGrid(string $name): Grid
     {
@@ -162,8 +162,8 @@ class GalleryGrid extends BaseControl
     /**
      * @param $id
      * @throws \Exception
-     * @isAllowed(gallery, delete)
      */
+    #[\Dravencms\User\Attributes\IsAllowed('gallery', 'delete')]
     public function handleDelete($id): void
     {
         $galleries = $this->galleryRepository->getById($id);

@@ -102,7 +102,7 @@ class PictureGrid extends BaseControl
     /**
      * @param string $name
      * @return Grid
-     * @throws \Ublaboo\DataGrid\Exception\DataGridException
+     * @throws \Contributte\Datagrid\Exception\DataGridException
      */
     public function createComponentGrid(string $name): Grid
     {

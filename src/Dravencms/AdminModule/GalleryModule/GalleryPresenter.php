@@ -61,19 +61,17 @@ class GalleryPresenter extends SecuredPresenter
     /** @var null|Picture */
     private $picture = null;
 
-    /**
-     * @isAllowed(gallery,edit)
-     */
+    #[\Dravencms\User\Attributes\IsAllowed('gallery', 'edit')]
     public function renderDefault(): void
     {
         $this->template->h1 = 'Galleries';
     }
 
     /**
-     * @isAllowed(gallery,edit)
      * @param $id
      * @throws \Nette\Application\BadRequestException
      */
+    #[\Dravencms\User\Attributes\IsAllowed('gallery', 'edit')]
     public function actionEdit(?int $id = null): void
     {
         if ($id) {
