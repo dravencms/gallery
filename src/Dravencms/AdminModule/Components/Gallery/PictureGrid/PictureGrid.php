@@ -158,7 +158,7 @@ class PictureGrid extends BaseControl
             $grid->addAction('editPicture', '', 'editPicture', ['galleryId' => 'gallery.id', 'pictureId' => 'id'])
                 ->setIcon('pencil')
                 ->setTitle('Upravit')
-                ->setClass('btn btn-xs btn-primary');
+                ->setClass('btn btn-sm btn-primary');
         }
 
         if ($this->user->isAllowed('gallery', 'delete'))
@@ -166,7 +166,7 @@ class PictureGrid extends BaseControl
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
-                ->setClass('btn btn-xs btn-danger ajax')
+                ->setClass('btn btn-sm btn-danger ajax')
                 ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];

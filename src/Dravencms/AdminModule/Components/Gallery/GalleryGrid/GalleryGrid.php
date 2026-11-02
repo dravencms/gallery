@@ -131,12 +131,12 @@ class GalleryGrid extends BaseControl
             $grid->addAction('pictures', 'Pictures')
                 ->setIcon('folder-open')
                 ->setTitle('Pictures')
-                ->setClass('btn btn-xs btn-default');
+                ->setClass('btn btn-sm btn-outline-secondary');
 
             $grid->addAction('edit', '')
                 ->setIcon('pencil')
                 ->setTitle('Upravit')
-                ->setClass('btn btn-xs btn-primary');
+                ->setClass('btn btn-sm btn-primary');
         }
 
         if ($this->user->isAllowed('gallery', 'delete'))
@@ -144,7 +144,7 @@ class GalleryGrid extends BaseControl
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
                 ->setTitle('Smazat')
-                ->setClass('btn btn-xs btn-danger ajax')
+                ->setClass('btn btn-sm btn-danger ajax')
                 ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
 
             $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
