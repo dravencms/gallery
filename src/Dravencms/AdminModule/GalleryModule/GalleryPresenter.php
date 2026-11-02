@@ -64,7 +64,7 @@ class GalleryPresenter extends SecuredPresenter
     #[\Dravencms\User\Attributes\IsAllowed('gallery', 'edit')]
     public function renderDefault(): void
     {
-        $this->template->h1 = 'Galleries';
+        $this->template->h1 = $this->translator->translate('gallery.admin.title.galleries');
     }
 
     /**
@@ -75,14 +75,14 @@ class GalleryPresenter extends SecuredPresenter
     public function actionEdit(?int $id = null): void
     {
         if ($id) {
-            $this->template->h1 = 'Edit gallery';
+            $this->template->h1 = $this->translator->translate('gallery.admin.title.editGallery');
             $gallery = $this->galleryRepository->getOneById($id);
             if (!$gallery) {
                 $this->error();
             }
             $this->gallery = $gallery;
         } else {
-            $this->template->h1 = 'New gallery';
+            $this->template->h1 = $this->translator->translate('gallery.admin.title.newGallery');
         }
     }
 
@@ -102,11 +102,11 @@ class GalleryPresenter extends SecuredPresenter
             }
 
             $this->picture = $picture;
-            $this->template->h1 = 'Edit picture';
+            $this->template->h1 = $this->translator->translate('gallery.admin.title.editPicture');
         }
         else
         {
-            $this->template->h1 = 'New picture';
+            $this->template->h1 = $this->translator->translate('gallery.admin.title.newPicture');
         }
     }
 
@@ -116,7 +116,7 @@ class GalleryPresenter extends SecuredPresenter
     public function actionNewPictureFromDirectory(int $galleryId): void
     {
         $this->gallery = $this->galleryRepository->getOneById($galleryId);
-        $this->template->h1 = 'New pictures from directory into gallery: '. $this->gallery->getIdentifier();
+        $this->template->h1 = $this->translator->translate('gallery.admin.title.importPictures', ['gallery' => $this->gallery->getIdentifier()]);
     }
 
     /**
@@ -126,7 +126,7 @@ class GalleryPresenter extends SecuredPresenter
     {
         $this->gallery = $this->galleryRepository->getOneById($id);
         $this->template->gallery = $this->gallery;
-        $this->template->h1 = 'Photos';
+        $this->template->h1 = $this->translator->translate('gallery.admin.title.pictures');
     }
 
     /**
@@ -137,7 +137,7 @@ class GalleryPresenter extends SecuredPresenter
         $control = $this->galleryFormFactory->create($this->gallery);
         $control->onSuccess[] = function()
         {
-            $this->flashMessage('Gallery has been successfully saved', Flash::SUCCESS);
+            $this->flashMessage($this->translator->translate('gallery.admin.flash.gallerySaved'), Flash::SUCCESS);
             $this->redirect("Gallery:");
         };
 
@@ -152,7 +152,7 @@ class GalleryPresenter extends SecuredPresenter
         $control = $this->pictureFormFactory->create($this->gallery, $this->picture);
         $control->onSuccess[] = function()
         {
-            $this->flashMessage('Picture has been successfully saved', Flash::SUCCESS);
+            $this->flashMessage($this->translator->translate('gallery.admin.flash.pictureSaved'), Flash::SUCCESS);
             $this->redirect('Gallery:pictures', $this->gallery->getId());
         };
         return $control;
@@ -166,7 +166,7 @@ class GalleryPresenter extends SecuredPresenter
         $control = $this->galleryGridFactory->create();
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Gallery has been successfully deleted', Flash::SUCCESS);
+            $this->flashMessage($this->translator->translate('gallery.admin.flash.galleryDeleted'), Flash::SUCCESS);
             $this->redirect('Gallery:');
         };
         return $control;
@@ -180,7 +180,7 @@ class GalleryPresenter extends SecuredPresenter
         $control = $this->pictureGridFactory->create($this->gallery);
         $control->onDelete[] = function()
         {
-            $this->flashMessage('Picture has been successfully deleted', Flash::SUCCESS);
+            $this->flashMessage($this->translator->translate('gallery.admin.flash.pictureDeleted'), Flash::SUCCESS);
             $this->redirect('Gallery:pictures', $this->gallery->getId());
         };
         return $control;
@@ -194,7 +194,7 @@ class GalleryPresenter extends SecuredPresenter
         $control = $this->directoryPictureFormFactory->create($this->gallery);
         $control->onSuccess[] = function()
         {
-            $this->flashMessage('Pictures has been successfully saved', Flash::SUCCESS);
+            $this->flashMessage($this->translator->translate('gallery.admin.flash.picturesSaved'), Flash::SUCCESS);
             $this->redirect('Gallery:pictures', $this->gallery->getId());
         };
         return $control;

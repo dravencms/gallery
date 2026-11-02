@@ -1,7 +1,7 @@
 {block #content}
     <p n:if="isAllowed('gallery', 'edit')">
-        <a n:href="Gallery:editPicture galleryId => $gallery->getId()" class="btn btn-primary"><i class="fa fa-plus"></i> {_"New photo"}</a>
-        <a n:href="Gallery:newPictureFromDirectory galleryId => $gallery->getId()" class="btn btn-primary"><i class="fa fa-plus"></i> {_"New photos from directory"}</a>
+        <a n:href="Gallery:editPicture galleryId => $gallery->getId()" class="btn btn-primary"><i class="fa fa-plus"></i> {_'gallery.admin.title.newPicture'}</a>
+        <a n:href="Gallery:newPictureFromDirectory galleryId => $gallery->getId()" class="btn btn-primary"><i class="fa fa-plus"></i> {_'gallery.admin.action.importPictures'}</a>
     </p>
     {control gridPicture}
 {/block}

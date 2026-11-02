@@ -112,7 +112,7 @@ class PictureGrid extends BaseControl
         $grid->setDataSource($this->pictureRepository->getPictureQueryBuilder($this->gallery));
 
         $grid->setDefaultSort(['position' => 'ASC']);
-        $grid->addColumnText('identifier', 'Identifier')
+        $grid->addColumnText('identifier', 'gallery.admin.field.identifier')
             ->setAlign('center')
             ->setRenderer(function ($row) use($grid){
                 /** @var Picture $row */
@@ -124,7 +124,7 @@ class PictureGrid extends BaseControl
                 }
 
                 if ($row->isPrimary()) {
-                    $el = Html::el('span', $grid->getTranslator()->translate('Primary photo'));
+                    $el = Html::el('span', $grid->getTranslator()->translate('gallery.admin.field.primaryPicture'));
                     $el->class = 'label label-info';
                 } else {
                     $el = '';
@@ -142,14 +142,14 @@ class PictureGrid extends BaseControl
             ->setFilterText();
 
 
-        $grid->addColumnDateTime('updatedAt', 'Last edit')
+        $grid->addColumnDateTime('updatedAt', 'gallery.admin.field.updatedAt')
             ->setFormat($this->currentLocale->getDateTimeFormat())
             ->setSortable()
             ->setFilterDate();
 
-        $grid->addColumnBoolean('isActive', 'Active');
+        $grid->addColumnBoolean('isActive', 'gallery.admin.field.active');
 
-        $grid->addColumnNumber('position', 'Position')
+        $grid->addColumnNumber('position', 'gallery.admin.field.position')
             ->setAlign('center')
             ->setFilterRange();
 
@@ -157,7 +157,7 @@ class PictureGrid extends BaseControl
         {
             $grid->addAction('editPicture', '', 'editPicture', ['galleryId' => 'gallery.id', 'pictureId' => 'id'])
                 ->setIcon('pencil')
-                ->setTitle('Upravit')
+                ->setTitle('gallery.admin.action.edit')
                 ->setClass('btn btn-sm btn-primary');
         }
 
@@ -165,18 +165,18 @@ class PictureGrid extends BaseControl
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
-                ->setTitle('Smazat')
+                ->setTitle('gallery.admin.action.delete')
                 ->setClass('btn btn-sm btn-danger ajax')
-                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
+                ->setConfirmation(new StringConfirmation('gallery.admin.confirm.delete', 'identifier'));
 
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
+            $grid->addGroupAction('gallery.admin.action.delete')->onSelect[] = [$this, 'handleDelete'];
         }
 
-        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
-            ->setTitle('Csv export (filtered)');
+        $grid->addExportCsvFiltered('gallery.admin.action.exportFiltered', 'acl_resource_filtered.csv')
+            ->setTitle('gallery.admin.action.exportFiltered');
 
-        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
-            ->setTitle('Csv export');
+        $grid->addExportCsv('gallery.admin.action.exportAll', 'acl_resource_all.csv')
+            ->setTitle('gallery.admin.action.exportAll');
 
         return $grid;
     }

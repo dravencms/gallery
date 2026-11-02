@@ -149,14 +149,14 @@ class PictureForm extends BaseControl
             $container = $form->addContainer($activeLocale->getLanguageCode());
 
             $container->addText('name')
-                ->setRequired('Please enter picture name.')
-                ->addRule(Form::MAX_LENGTH, 'Picture name is too long.', 255);
+                ->setRequired('gallery.admin.validation.pictureNameRequired')
+                ->addRule(Form::MAX_LENGTH, 'gallery.admin.validation.pictureNameTooLong', 255);
 
             $container->addTextArea('description');
         }
 
         $form->addText('identifier')
-            ->setRequired('Please enter picture identifier.');
+            ->setRequired('gallery.admin.validation.identifierRequired');
 
 
         $form->addText('structureFile')
@@ -172,7 +172,7 @@ class PictureForm extends BaseControl
         $form->addCheckbox('isActive');
         $form->addCheckbox('isPrimary');
 
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'gallery.admin.action.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
@@ -217,17 +217,17 @@ class PictureForm extends BaseControl
         $values = $form->getValues();
 
         if (!$this->pictureRepository->isIdentifierFree($values->identifier, $this->gallery, $this->picture)) {
-            $form->addError('Tento identifier je již zabrán.');
+            $form->addError('gallery.admin.validation.identifierTaken');
         }
 
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             if (!$this->pictureTranslationRepository->isNameFree($values->{$activeLocale->getLanguageCode()}->name, $activeLocale, $this->gallery, $this->picture)) {
-                $form->addError('Tento název je již zabrán.');
+                $form->addError('gallery.admin.validation.nameTaken');
             }
         }
 
         if (!$this->user->isAllowed('gallery', 'edit')) {
-            $form->addError('Nemáte oprávění editovat gallery.');
+            $form->addError('gallery.admin.validation.editForbidden');
         }
     }
 

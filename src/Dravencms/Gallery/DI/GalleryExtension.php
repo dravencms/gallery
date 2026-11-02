@@ -2,6 +2,7 @@
 
 namespace Dravencms\Gallery\DI;
 
+use Contributte\Translation\DI\TranslationProviderInterface;
 use Dravencms\Gallery\Gallery;
 
 use Nette\DI\CompilerExtension;
@@ -10,8 +11,12 @@ use Dravencms\Structure\DI\StructureExtension;
  * Class GalleryExtension
  * @package Dravencms\Gallery\DI
  */
-class GalleryExtension extends CompilerExtension
+class GalleryExtension extends CompilerExtension implements TranslationProviderInterface
 {
+    public function getTranslationResources(): array
+    {
+        return [__DIR__ . '/../lang'];
+    }
 
     public function loadConfiguration(): void
     {

@@ -98,28 +98,28 @@ class GalleryGrid extends BaseControl
         $grid->setDataSource($this->galleryRepository->getGalleryQueryBuilder());
 
         $grid->setDefaultSort(['position' => 'ASC']);
-        $grid->addColumnText('identifier', 'Identifier')
+        $grid->addColumnText('identifier', 'gallery.admin.field.identifier')
             ->setFilterText();
 
-        $grid->addColumnDateTime('date', 'Date')
+        $grid->addColumnDateTime('date', 'gallery.admin.field.date')
             ->setFormat($this->currentLocale->getDateTimeFormat())
             ->setAlign('center')
             ->setSortable()
             ->setFilterDate();
 
-        $grid->addColumnDateTime('updatedAt', 'Last edit')
+        $grid->addColumnDateTime('updatedAt', 'gallery.admin.field.updatedAt')
             ->setFormat($this->currentLocale->getDateTimeFormat())
             ->setAlign('center')
             ->setSortable()
             ->setFilterDate();
 
-        $grid->addColumnBoolean('isActive', 'Active');
+        $grid->addColumnBoolean('isActive', 'gallery.admin.field.active');
 
-        $grid->addColumnNumber('position', 'Position')
+        $grid->addColumnNumber('position', 'gallery.admin.field.position')
             ->setAlign('center')
             ->setFilterRange();
 
-        $grid->addColumnNumber('pictures', 'Pictures')
+        $grid->addColumnNumber('pictures', 'gallery.admin.field.pictures')
             ->setAlign('center')
             ->setRenderer(function($row){
                 /** @var Gallery $row */
@@ -128,14 +128,14 @@ class GalleryGrid extends BaseControl
 
         if ($this->user->isAllowed('gallery', 'edit'))
         {
-            $grid->addAction('pictures', 'Pictures')
+            $grid->addAction('pictures', 'gallery.admin.field.pictures')
                 ->setIcon('folder-open')
-                ->setTitle('Pictures')
+                ->setTitle('gallery.admin.field.pictures')
                 ->setClass('btn btn-sm btn-outline-secondary');
 
             $grid->addAction('edit', '')
                 ->setIcon('pencil')
-                ->setTitle('Upravit')
+                ->setTitle('gallery.admin.action.edit')
                 ->setClass('btn btn-sm btn-primary');
         }
 
@@ -143,18 +143,18 @@ class GalleryGrid extends BaseControl
         {
             $grid->addAction('delete', '', 'delete!')
                 ->setIcon('trash')
-                ->setTitle('Smazat')
+                ->setTitle('gallery.admin.action.delete')
                 ->setClass('btn btn-sm btn-danger ajax')
-                ->setConfirmation(new StringConfirmation('Do you really want to delete row %s?', 'identifier'));
+                ->setConfirmation(new StringConfirmation('gallery.admin.confirm.delete', 'identifier'));
 
-            $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDelete'];
+            $grid->addGroupAction('gallery.admin.action.delete')->onSelect[] = [$this, 'handleDelete'];
         }
 
-        $grid->addExportCsvFiltered('Csv export (filtered)', 'acl_resource_filtered.csv')
-            ->setTitle('Csv export (filtered)');
+        $grid->addExportCsvFiltered('gallery.admin.action.exportFiltered', 'acl_resource_filtered.csv')
+            ->setTitle('gallery.admin.action.exportFiltered');
 
-        $grid->addExportCsv('Csv export', 'acl_resource_all.csv')
-            ->setTitle('Csv export');
+        $grid->addExportCsv('gallery.admin.action.exportAll', 'acl_resource_all.csv')
+            ->setTitle('gallery.admin.action.exportAll');
 
         return $grid;
     }

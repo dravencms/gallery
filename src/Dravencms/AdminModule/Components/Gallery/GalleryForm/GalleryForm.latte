@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="mb-3">
-                                    <label class="form-label" n:name="name">{_"Name"}</label>
+                                    <label class="form-label" n:name="name">{_'gallery.admin.field.name'}</label>
                                     <input type="text" n:name="name" autofocus="autofocus" class="form-control">
                                 </div>
                             </div><!-- col-sm-12 -->
@@ -25,7 +25,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="mb-3">
-                                    <label class="form-label" n:name="description">{_"Description"}</label>
+                                    <label class="form-label" n:name="description">{_'gallery.admin.field.description'}</label>
                                     <textarea n:name="description" class="form-control"></textarea>
                                 </div>
                             </div><!-- col-sm-12 -->
@@ -38,13 +38,13 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label" n:name="identifier">{_"Identifier"}</label>
+                    <label class="form-label" n:name="identifier">{_'gallery.admin.field.identifier'}</label>
                     <input type="text" n:name="identifier" class="form-control">
                 </div>
             </div><!-- col-sm-6 -->
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label" n:name="position">{_"Position"}</label>
+                    <label class="form-label" n:name="position">{_'gallery.admin.field.position'}</label>
                     <input type="number" n:name="position" class="form-control">
                 </div>
             </div><!-- col-sm-6 -->
@@ -53,8 +53,8 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="mb-3">
-                    <label class="form-label" n:name="date">{_"Date"}</label>
-                    <input type="text" n:name="date" class="form-control date" data-format="DD.MM.YYYY">
+                    <label class="form-label" n:name="date">{_'gallery.admin.field.date'}</label>
+                    <input type="text" n:name="date" class="form-control date">
                 </div>
             </div><!-- col-sm-6 -->
         </div><!-- row -->
@@ -63,7 +63,7 @@
             <div class="col-sm-12">
                 <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isActive" class="form-check-input"> <span class="form-check-label">{_"Active"}</span>
+                        <input type="checkbox" n:name="isActive" class="form-check-input"> <span class="form-check-label">{_'gallery.admin.field.active'}</span>
                     </label>
                 </div>
             </div>
@@ -72,7 +72,7 @@
             <div class="col-sm-12">
                 <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isShowName" class="form-check-input"> <span class="form-check-label">{_"Show name"}</span>
+                        <input type="checkbox" n:name="isShowName" class="form-check-input"> <span class="form-check-label">{_'gallery.admin.field.showName'}</span>
                     </label>
                 </div>
             </div>
@@ -81,7 +81,7 @@
             <div class="col-sm-12">
                 <div class="form-check">
                     <label>
-                        <input type="checkbox" n:name="isInOverview" class="form-check-input"> <span class="form-check-label">{_"In overview"}</span>
+                        <input type="checkbox" n:name="isInOverview" class="form-check-input"> <span class="form-check-label">{_'gallery.admin.field.inOverview'}</span>
                     </label>
                 </div>
             </div>
@@ -89,6 +89,6 @@
     </div>
 
     <div class="card-footer">
-        <input type="submit" n:name="send" class="btn btn-success button" value="{_"Save"}">
+        <input type="submit" n:name="send" class="btn btn-success button" value="{_'gallery.admin.action.save'}">
     </div>
 </form>

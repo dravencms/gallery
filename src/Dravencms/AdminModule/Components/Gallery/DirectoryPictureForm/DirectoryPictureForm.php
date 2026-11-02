@@ -150,7 +150,7 @@ class DirectoryPictureForm extends BaseControl
 
         $form->addCheckbox('isActive');
 
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'gallery.admin.action.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
@@ -163,7 +163,7 @@ class DirectoryPictureForm extends BaseControl
     public function editFormValidate(Form $form): void
     {
         if (!$this->user->isAllowed('gallery', 'edit')) {
-            $form->addError('Nemáte oprávění editovat gallery.');
+            $form->addError('gallery.admin.validation.editForbidden');
         }
     }
 

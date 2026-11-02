@@ -1,0 +1,53 @@
+admin:
+    field:
+        name: Name
+        description: Description
+        identifier: Identifier
+        position: Position
+        date: Date
+        updatedAt: Last updated
+        active: Active
+        showName: Show name
+        inOverview: Show in overview
+        tags: Tags
+        primaryPicture: Primary photo
+        directory: Folder
+        pictures: Photos
+
+    action:
+        save: Save
+        edit: Edit
+        delete: Delete
+        exportAll: CSV export
+        exportFiltered: 'CSV export (filtered)'
+        importPictures: Add photos from a folder
+
+    title:
+        galleries: Galleries
+        editGallery: Edit gallery
+        newGallery: New gallery
+        editPicture: Edit photo
+        newPicture: New photo
+        pictures: Photos
+        importPictures: 'Add photos from a folder to gallery "%gallery%"'
+
+    validation:
+        galleryNameRequired: Please enter a gallery name.
+        galleryNameTooLong: The gallery name must not exceed %d characters.
+        pictureNameRequired: Please enter a photo name.
+        pictureNameTooLong: The photo name must not exceed %d characters.
+        identifierRequired: Please enter an identifier.
+        identifierTaken: This identifier is already in use.
+        nameTaken: This name is already in use.
+        editForbidden: You do not have permission to edit galleries.
+        dateInvalid: 'The date must use the format %format%.'
+
+    confirm:
+        delete: 'Are you sure you want to delete "%s"?'
+
+    flash:
+        gallerySaved: The gallery has been saved.
+        pictureSaved: The photo has been saved.
+        galleryDeleted: The gallery has been deleted.
+        pictureDeleted: The photo has been deleted.
+        picturesSaved: The photos have been saved.

@@ -20,6 +20,7 @@
 
 namespace Dravencms\AdminModule\Components\Gallery\GalleryForm;
 
+use Contributte\Translation\Wrappers\Message;
 use Dravencms\Components\BaseControl\BaseControl;
 use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\Model\Gallery\Entities\Gallery;
@@ -111,16 +112,17 @@ class GalleryForm extends BaseControl
         foreach ($this->localeRepository->getActive() AS $activeLocale) {
             $container = $form->addContainer($activeLocale->getLanguageCode());
             $container->addText('name')
-                ->setRequired('Please enter gallery name.')
-                ->addRule(Form::MAX_LENGTH, 'Gallery name is too long.', 255);
+                ->setRequired('gallery.admin.validation.galleryNameRequired')
+                ->addRule(Form::MAX_LENGTH, 'gallery.admin.validation.galleryNameTooLong', 255);
 
             $container->addTextArea('description');
         }
 
-        $form->addText('date');
+        $form->addText('date')
+            ->setHtmlAttribute('data-format', $this->currentLocale->getDateFormat());
 
         $form->addText('identifier')
-            ->setRequired('Please enter identifier');
+            ->setRequired('gallery.admin.validation.identifierRequired');
 
         $form->addInteger('position')
             ->setDisabled(is_null($this->gallery));
@@ -130,7 +132,7 @@ class GalleryForm extends BaseControl
         $form->addCheckbox('isInOverview');
 
 
-        $form->addSubmit('send');
+        $form->addSubmit('send', 'gallery.admin.action.save');
 
         $form->onValidate[] = [$this, 'editFormValidate'];
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
@@ -173,18 +175,18 @@ class GalleryForm extends BaseControl
         $values = $form->getValues();
 
         if (!$this->galleryRepository->isIdentifierFree($values->identifier, $this->gallery)) {
-            $form->addError('Tento identifier je již zabrán.');
+            $form->addError('gallery.admin.validation.identifierTaken');
         }
 
         $date = ($values->date ? \DateTime::createFromFormat($this->currentLocale->getDateFormat(), $values->date) : null);
 
         if ($date === false)
         {
-            $form->addError(sprintf('Datum má nesprávný formát, pouze %s je podporován.', $this->currentLocale->getDateFormat()));
+            $form->addError(new Message('gallery.admin.validation.dateInvalid', ['format' => $this->currentLocale->getDateFormat()]));
         }
 
         if (!$this->user->isAllowed('gallery', 'edit')) {
-            $form->addError('Nemáte oprávění editovat article.');
+            $form->addError('gallery.admin.validation.editForbidden');
         }
     }
 

@@ -1,0 +1,53 @@
+admin:
+    field:
+        name: Název
+        description: Popis
+        identifier: Identifikátor
+        position: Pořadí
+        date: Datum
+        updatedAt: Poslední úprava
+        active: Aktivní
+        showName: Zobrazit název
+        inOverview: Zobrazit v přehledu
+        tags: Štítky
+        primaryPicture: Hlavní fotografie
+        directory: Složka
+        pictures: Fotografie
+
+    action:
+        save: Uložit
+        edit: Upravit
+        delete: Smazat
+        exportAll: Export CSV
+        exportFiltered: 'Export CSV (filtrovaný)'
+        importPictures: Přidat fotografie ze složky
+
+    title:
+        galleries: Galerie
+        editGallery: Upravit galerii
+        newGallery: Nová galerie
+        editPicture: Upravit fotografii
+        newPicture: Nová fotografie
+        pictures: Fotografie
+        importPictures: 'Přidat fotografie ze složky do galerie "%gallery%"'
+
+    validation:
+        galleryNameRequired: Zadejte prosím název galerie.
+        galleryNameTooLong: Název galerie může mít nejvýše %d znaků.
+        pictureNameRequired: Zadejte prosím název fotografie.
+        pictureNameTooLong: Název fotografie může mít nejvýše %d znaků.
+        identifierRequired: Zadejte prosím identifikátor.
+        identifierTaken: Tento identifikátor je již používán.
+        nameTaken: Tento název je již používán.
+        editForbidden: Nemáte oprávnění upravovat galerie.
+        dateInvalid: 'Datum musí být ve formátu %format%.'
+
+    confirm:
+        delete: 'Opravdu chcete smazat záznam "%s"?'
+
+    flash:
+        gallerySaved: Galerie byla uložena.
+        pictureSaved: Fotografie byla uložena.
+        galleryDeleted: Galerie byla smazána.
+        pictureDeleted: Fotografie byla smazána.
+        picturesSaved: Fotografie byly uloženy.
