@@ -9,7 +9,7 @@ Image-gallery administration and frontend components for DravenCMS. Galleries us
 - Picture ordering, captions, activation, and tags.
 - Overview and detail frontend components for CMS pages.
 - Commands for historical link migration and gallery retention cleanup.
-- Admin menu and ACL fixtures.
+- Provider-defined admin navigation and ACL permissions.
 
 ## Installation
 
@@ -17,7 +17,7 @@ Image-gallery administration and frontend components for DravenCMS. Galleries us
 composer require dravencms/gallery
 ```
 
-The package loader registers the extension, admin presenter, services, and Doctrine mappings. Apply the package schema through the application's migration workflow and load fixtures for the default admin menu and permissions.
+The package loader registers the extension, admin presenter, services, and Doctrine mappings. Apply the package schema through the application's migration workflow before using the gallery. Navigation and permission definitions come from providers; assign permissions through the group editor.
 
 ## Frontend Integration
 
