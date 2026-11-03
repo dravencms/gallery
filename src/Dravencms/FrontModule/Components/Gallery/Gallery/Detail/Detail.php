@@ -63,7 +63,7 @@ class Detail extends BaseControl
         $template->galleryTranslation = $this->galleryTranslationRepository->getTranslation($gallery, $this->currentLocale);
 
         $pictureTranslations = [];
-        foreach($gallery->getPictures() AS $picture)
+        foreach($gallery->getPublicPictures() AS $picture)
         {
             $pictureTranslations[] = $this->pictureTranslationRepository->getTranslation($picture, $this->currentLocale);
         }

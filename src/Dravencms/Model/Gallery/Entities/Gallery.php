@@ -211,6 +211,23 @@ class Gallery
         return $this->date;
     }
     
+    /** Published attachments only; administrative collections remain unchanged. */
+    public function getPublicPictures(): Collection
+    {
+        return $this->getPictures()->matching(Criteria::create()->where(Criteria::expr()->eq('isActive', true)));
+    }
+
+    public function getPublicPrimaryPicture(): ?Picture
+    {
+        if (!$this->isActive()) { return null; }
+        $first = null;
+        foreach ($this->getPublicPictures() as $picture) {
+            $first ??= $picture;
+            if ($picture->isPrimary()) { return $picture; }
+        }
+        return $first;
+    }
+
     /**
      * @return ArrayCollection|\Doctrine\Common\Collections\Collection
      */
