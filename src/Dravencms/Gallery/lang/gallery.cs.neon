@@ -51,3 +51,6 @@ admin:
         galleryDeleted: Galerie byla smazána.
         pictureDeleted: Fotografie byla smazána.
         picturesSaved: Fotografie byly uloženy.
+
+menu:
+    overview: 'Galerie'

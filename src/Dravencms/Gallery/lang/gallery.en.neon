@@ -51,3 +51,6 @@ admin:
         galleryDeleted: The gallery has been deleted.
         pictureDeleted: The photo has been deleted.
         picturesSaved: The photos have been saved.
+
+menu:
+    overview: 'Galleries'

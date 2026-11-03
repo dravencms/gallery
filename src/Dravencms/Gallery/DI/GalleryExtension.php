@@ -21,6 +21,9 @@ class GalleryExtension extends CompilerExtension implements TranslationProviderI
     public function loadConfiguration(): void
     {
         $builder = $this->getContainerBuilder();
+        if ($this->compiler->getExtensions(\Dravencms\Admin\DI\AdminExtension::class) !== []) {
+            $builder->addDefinition($this->prefix('adminMenuProvider'))->setFactory(\Dravencms\Gallery\AdminMenuProvider::class);
+        }
 
         $builder->addDefinition($this->prefix('gallery'))
             ->setFactory(Gallery::class);

@@ -15,7 +15,7 @@
     }
   ],
   "require": {
-    "dravencms/admin": "^2.3",
+    "dravencms/admin": "^3.0",
     "dravencms/tag": "^2.0",
     "dravencms/file": "^2.1"
   },
