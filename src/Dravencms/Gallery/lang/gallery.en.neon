@@ -54,3 +54,11 @@ admin:
 
 menu:
     overview: 'Galleries'
+
+acl:
+    resource: 'Galleries'
+    permissions:
+        edit:
+            label: 'Manage galleries'
+        delete:
+            label: 'Delete galleries'

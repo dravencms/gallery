@@ -3,6 +3,4 @@
 - Dravencms\Model\Gallery\Repository\PictureTranslationRepository
 - Dravencms\Model\Gallery\Repository\GalleryTranslationRepository
 
-- Dravencms\Model\Gallery\Fixtures\AclOperationFixtures
-- Dravencms\Model\Gallery\Fixtures\AclResourceFixtures
 - Dravencms\Model\Gallery\Fixtures\FileFixtures

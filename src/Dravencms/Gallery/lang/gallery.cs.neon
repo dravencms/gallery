@@ -54,3 +54,11 @@ admin:
 
 menu:
     overview: 'Galerie'
+
+acl:
+    resource: 'Galerie'
+    permissions:
+        edit:
+            label: 'Spravovat galerie'
+        delete:
+            label: 'Mazat galerie'
