@@ -233,7 +233,6 @@ class PictureForm extends BaseControl
 
     public function editFormSucceeded(Form $form): void
     {
-        $this->requirePermission('gallery', 'edit');
         $values = $form->getValues();
 
         $tags = new ArrayCollection($this->tagRepository->getById($values->tags));
