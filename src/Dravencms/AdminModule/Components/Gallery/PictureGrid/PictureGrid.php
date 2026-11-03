@@ -119,7 +119,7 @@ class PictureGrid extends BaseControl
                 /** @var Picture $row */
                 if ($haveImage = $row->getStructureFileLink()) {
                     $img = Html::el('img');
-                    $img->src = $this->imagePipe->request($haveImage->getStructureFile()->getFile(), '200x');
+                    $img->src = $this->imagePipe->request(\Salamek\Files\Access\FileReference::attachment('gallery.picture', $row->getId(), $haveImage->getStructureFile()), '200x');
                 } else {
                     $img = '';
                 }

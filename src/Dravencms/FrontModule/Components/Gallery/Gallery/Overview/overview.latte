@@ -13,7 +13,7 @@
                     {var $structureFile = null}
                 {/if}
 
-                <img class="img-responsive" n:img="$structureFile, '553x306', 'exact'" alt="{$galleryTranslation->getName()}">
+                <img class="img-responsive" n:img="\Salamek\Files\Access\FileReference::attachment('gallery.picture', $picture->getId(), $structureFile), '553x306', 'exact'" alt="{$galleryTranslation->getName()}">
             </a>
             <div class="desc">
                 <h4><small><a n:cmsLink="Gallery\Gallery\Detail, 'id' => $gallery->getId()">{$galleryTranslation->getName()}</a></small></h4>

@@ -28,6 +28,11 @@ class GalleryTranslationRepository
         $this->galleryTranslationRepository = $entityManager->getRepository(GalleryTranslation::class);
     }
 
+    public function getOneById(int $id): ?GalleryTranslation
+    {
+        return $this->galleryTranslationRepository->find($id);
+    }
+
     /**
      * @param string $name
      * @param ILocale $locale
