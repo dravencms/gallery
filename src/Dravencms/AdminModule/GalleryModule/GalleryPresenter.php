@@ -29,6 +29,7 @@ use Dravencms\Model\Tag\Repository\TagRepository;
  *
  * @author sadam
  */
+#[\Dravencms\User\Attributes\IsAllowed('gallery', 'edit')]
 class GalleryPresenter extends SecuredPresenter
 {
     /** @var GalleryRepository @inject */
@@ -91,6 +92,7 @@ class GalleryPresenter extends SecuredPresenter
      * @param int|null $pictureId
      * @throws \Nette\Application\BadRequestException
      */
+    #[\Dravencms\User\Attributes\IsAllowed('gallery', 'edit')]
     public function actionEditPicture(int $galleryId, ?int $pictureId = null)
     {
         $this->gallery = $this->galleryRepository->getOneById($galleryId);
@@ -113,6 +115,7 @@ class GalleryPresenter extends SecuredPresenter
     /**
      * @param int $galleryId
      */
+    #[\Dravencms\User\Attributes\IsAllowed('gallery', 'edit')]
     public function actionNewPictureFromDirectory(int $galleryId): void
     {
         $this->gallery = $this->galleryRepository->getOneById($galleryId);
@@ -122,6 +125,7 @@ class GalleryPresenter extends SecuredPresenter
     /**
      * @param $id
      */
+    #[\Dravencms\User\Attributes\IsAllowed('gallery', 'edit')]
     public function actionPictures(int $id): void
     {
         $this->gallery = $this->galleryRepository->getOneById($id);

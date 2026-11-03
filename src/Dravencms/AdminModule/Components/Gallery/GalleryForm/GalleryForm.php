@@ -196,6 +196,7 @@ class GalleryForm extends BaseControl
      */
     public function editFormSucceeded(Form $form): void
     {
+        $this->requirePermission('gallery', 'edit');
         $values = $form->getValues();
 
         $date = ($values->date ? \DateTime::createFromFormat($this->currentLocale->getDateFormat(), $values->date) : null);

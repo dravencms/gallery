@@ -48,3 +48,7 @@ This package is licensed under the LGPL-3.0-only license.
 ## Gallery file storage
 
 The gallery creates its root `gallery` file structure when the first picture upload needs it and reuses it on later uploads. No fixture or setup command is needed. Existing file structures and files are retained; a structure named `gallery` below another parent does not replace the gallery root.
+
+## Admin authorization and mutations
+
+Administration uses User 3.1, Admin 3.2 and Application 0.3 guards. Screens and write callbacks enforce the existing provider-defined permissions server-side, including direct URLs and bulk callbacks. Mutating signals require POST and a session-bound action token; synchronize the matching admin assets when upgrading. See the User package's `user:security:migrate` instructions for the password-reset schema change.

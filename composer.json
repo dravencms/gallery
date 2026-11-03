@@ -17,7 +17,8 @@
   "require": {
     "dravencms/admin": "^3.0",
     "dravencms/tag": "^2.0",
-    "dravencms/file": "^2.1"
+    "dravencms/file": "^2.1",
+    "dravencms/application": "^0.3"
   },
   "suggest": {
     "dravencms/structure": "Allows gallery components to be used in cms"
@@ -36,6 +37,7 @@
     }
   },
   "conflict": {
-    "dravencms/user": "<3.0"
+    "dravencms/user": "<3.1",
+    "dravencms/admin": "<3.2"
   }
 }

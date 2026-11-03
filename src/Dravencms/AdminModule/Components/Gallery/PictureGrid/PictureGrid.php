@@ -108,6 +108,7 @@ class PictureGrid extends BaseControl
     {
         /** @var Grid $grid */
         $grid = $this->baseGridFactory->create($this, $name);
+        $grid->setWritePermission('gallery', 'edit');
 
         $grid->setDataSource($this->pictureRepository->getPictureQueryBuilder($this->gallery));
 
@@ -185,8 +186,11 @@ class PictureGrid extends BaseControl
      * @param $id
      * @throws \Exception
      */
+    #[\Dravencms\User\Attributes\IsAllowed('gallery', 'delete')]
+    #[\Dravencms\Security\Mutation]
     public function handleDelete($id): void
     {
+        $this->requirePermission('gallery', 'delete');
         $pictures = $this->pictureRepository->getById($id);
         foreach ($pictures AS $picture)
         {
