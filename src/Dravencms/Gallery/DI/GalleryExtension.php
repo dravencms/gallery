@@ -21,6 +21,7 @@ class GalleryExtension extends CompilerExtension implements TranslationProviderI
     public function loadConfiguration(): void
     {
         $builder = $this->getContainerBuilder();
+        $builder->addDefinition($this->prefix('fileStructure'))->setFactory(\Dravencms\Gallery\FileStructure::class);
         if ($this->compiler->getExtensions(\Dravencms\User\DI\UserExtension::class) !== []) {
             $builder->addDefinition($this->prefix('aclProvider'))->setFactory(\Dravencms\Gallery\AclProvider::class);
         }

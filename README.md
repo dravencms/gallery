@@ -44,3 +44,7 @@ Both commands modify persisted gallery/file relationships. Back up the database 
 ## License
 
 This package is licensed under the LGPL-3.0-only license.
+
+## Gallery file storage
+
+The gallery creates its root `gallery` file structure when the first picture upload needs it and reuses it on later uploads. No fixture or setup command is needed. Existing file structures and files are retained; a structure named `gallery` below another parent does not replace the gallery root.

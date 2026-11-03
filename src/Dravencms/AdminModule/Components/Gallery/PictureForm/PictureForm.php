@@ -27,7 +27,7 @@ use Dravencms\File\File;
 use Dravencms\Model\File\Entities\Structure;
 use Dravencms\Model\File\Entities\StructureFileLink;
 use Dravencms\Model\File\Repository\StructureFileRepository;
-use Dravencms\Model\File\Repository\StructureRepository;
+use Dravencms\Gallery\FileStructure;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
 use Dravencms\Model\Gallery\Entities\PictureTranslation;
@@ -69,8 +69,8 @@ class PictureForm extends BaseControl
     /** @var PictureTranslationRepository */
     private $pictureTranslationRepository;
 
-    /** @var StructureRepository */
-    private $structureRepository;
+    /** @var FileStructure */
+    private $galleryFileStructure;
 
     /** @var User */
     private $user;
@@ -98,7 +98,7 @@ class PictureForm extends BaseControl
      * @param PictureTranslationRepository $pictureTranslationRepository
      * @param TagRepository $tagRepository
      * @param StructureFileRepository $structureFileRepository
-     * @param StructureRepository $structureRepository
+     * @param FileStructure $galleryFileStructure
      * @param FileStorage $fileStorage
      * @param User $user
      * @param LocaleRepository $localeRepository
@@ -113,7 +113,7 @@ class PictureForm extends BaseControl
         PictureTranslationRepository $pictureTranslationRepository,
         TagRepository $tagRepository,
         StructureFileRepository $structureFileRepository,
-        StructureRepository $structureRepository,
+        FileStructure $galleryFileStructure,
         FileStorage $fileStorage,
         User $user,
         LocaleRepository $localeRepository,
@@ -131,7 +131,7 @@ class PictureForm extends BaseControl
         $this->tagRepository = $tagRepository;
         $this->structureFileRepository = $structureFileRepository;
         $this->localeRepository = $localeRepository;
-        $this->structureRepository = $structureRepository;
+        $this->galleryFileStructure = $galleryFileStructure;
         $this->fileStorage = $fileStorage;
         $this->user = $user;
         $this->file = $file;
@@ -245,7 +245,7 @@ class PictureForm extends BaseControl
 
         $file = $values->file;
         if ($file->isOk()) {
-            $structure = $this->structureRepository->getOneByName(\Dravencms\Gallery\Gallery::PLUGIN_NAME);
+            $structure = $this->galleryFileStructure->getOrCreate();
             $structureFile = $this->fileStorage->processFile($file, $structure);
         }
 

@@ -2,5 +2,3 @@
 - Dravencms\Model\Gallery\Repository\PictureRepository
 - Dravencms\Model\Gallery\Repository\PictureTranslationRepository
 - Dravencms\Model\Gallery\Repository\GalleryTranslationRepository
-
-- Dravencms\Model\Gallery\Fixtures\FileFixtures
