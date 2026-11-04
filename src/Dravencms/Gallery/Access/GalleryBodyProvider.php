@@ -2,11 +2,11 @@
 namespace Dravencms\Gallery\Access;
 use Salamek\Files\Access\{IFileAccessProvider, FileAccess, BodyFiles};
 use Dravencms\Model\Gallery\Repository\GalleryTranslationRepository;
-use Nette\Security\User;
+use Dravencms\File\Access\AdminFileAccess;
 
 final class GalleryBodyProvider implements IFileAccessProvider
 {
-    public function __construct(private GalleryTranslationRepository $repository, private User $user, private BodyFiles $bodyFiles) {}
+    public function __construct(private GalleryTranslationRepository $repository, private AdminFileAccess $user, private BodyFiles $bodyFiles) {}
     public static function getId(): string { return 'gallery.body'; }
     public function resolve(string $reference): ?FileAccess
     {
