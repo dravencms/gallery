@@ -15,3 +15,14 @@ nettrine.orm:
                     directories:
                         - %appDir%/../vendor/dravencms/gallery/src/Dravencms/Model/Gallery/Entities
                     namespace: Dravencms\Model\Gallery
+
+files:
+    variants:
+        gallery-cover:
+            width: 553
+            height: 306
+            resizeMode: exact
+        gallery-thumb:
+            width: 263
+            height: 150
+            resizeMode: fit_exact

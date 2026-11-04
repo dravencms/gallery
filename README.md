@@ -62,3 +62,15 @@ attachments are public-cacheable; admin previews of unpublished content require 
 plugin's edit permission and are private. Original files and generated images stay
 outside the document root. Install the private-storage configuration and run File's
 checksum/storage migrations before serving this release. See the File package README.
+
+
+## Variant configuration (3.1)
+
+This package declares its own variants in `dravencms.config.neon`; Nette merges the
+`files.variants` maps. Definitions use named `width`, `height` and `resizeMode` fields.
+`resizeMode` defaults to `fit`; an omitted/null dimension is unconstrained, and at
+least one dimension is required. On upgrade, replace old positional definitions
+and remove variants owned by other packages from the File configuration. Project
+variants belong in project configuration. Update the matching File, Nette Files
+and installed Gallery/Article/Partner/Carousel releases together. No additional
+database or storage migration is needed for this configuration change.
