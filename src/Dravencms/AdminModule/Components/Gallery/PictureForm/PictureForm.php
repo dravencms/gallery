@@ -26,7 +26,6 @@ use Dravencms\Components\BaseForm\BaseFormFactory;
 use Dravencms\File\File;
 use Dravencms\Model\File\Entities\Structure;
 use Dravencms\Model\File\Entities\StructureFileLink;
-use Dravencms\Model\File\Repository\StructureFileRepository;
 use Dravencms\Gallery\FileStructure;
 use Dravencms\Model\Gallery\Entities\Gallery;
 use Dravencms\Model\Gallery\Entities\Picture;
@@ -59,9 +58,6 @@ class PictureForm extends BaseControl
 
     /** @var TagRepository */
     private $tagRepository;
-
-    /** @var StructureFileRepository */
-    private $structureFileRepository;
 
     /** @var LocaleRepository */
     private $localeRepository;
@@ -97,7 +93,6 @@ class PictureForm extends BaseControl
      * @param PictureRepository $pictureRepository
      * @param PictureTranslationRepository $pictureTranslationRepository
      * @param TagRepository $tagRepository
-     * @param StructureFileRepository $structureFileRepository
      * @param FileStructure $galleryFileStructure
      * @param FileStorage $fileStorage
      * @param User $user
@@ -112,7 +107,6 @@ class PictureForm extends BaseControl
         PictureRepository $pictureRepository,
         PictureTranslationRepository $pictureTranslationRepository,
         TagRepository $tagRepository,
-        StructureFileRepository $structureFileRepository,
         FileStructure $galleryFileStructure,
         FileStorage $fileStorage,
         User $user,
@@ -129,7 +123,6 @@ class PictureForm extends BaseControl
         $this->entityManager = $entityManager;
         $this->pictureRepository = $pictureRepository;
         $this->tagRepository = $tagRepository;
-        $this->structureFileRepository = $structureFileRepository;
         $this->localeRepository = $localeRepository;
         $this->galleryFileStructure = $galleryFileStructure;
         $this->fileStorage = $fileStorage;
@@ -159,10 +152,8 @@ class PictureForm extends BaseControl
             ->setRequired('gallery.admin.validation.identifierRequired');
 
 
-        $form->addText('structureFile')
-            ->setHtmlType('number');
+        $this->file->addSelector($form, 'structureFile', 'file.selectImage', \Salamek\Files\Models\IFile::TYPE_IMAGE, true)->setRequired('file.picker.required')->setExistingFile($this->picture?->getStructureFile());
 
-        $form->addUpload('file');
 
         $form->addMultiSelect('tags', null, $this->tagRepository->getPairs());
         
@@ -237,13 +228,9 @@ class PictureForm extends BaseControl
 
         $tags = new ArrayCollection($this->tagRepository->getById($values->tags));
 
-        if ($values->structureFile) {
-            $structureFile = $this->structureFileRepository->getOneById(intval($values->structureFile));
-        } else {
-            $structureFile = null;
-        }
+        $structureFile = $values->structureFile->file;
 
-        $file = $values->file;
+        $file = $values->structureFile->upload;
         if ($file->isOk()) {
             $structure = $this->galleryFileStructure->getOrCreate();
             $structureFile = $this->fileStorage->processFile($file, $structure);
@@ -305,7 +292,7 @@ class PictureForm extends BaseControl
     public function render(): void
     {
         $template = $this->template;
-        $template->fileSelectorPath = $this->file->getFileSelectorPath();
+
         $template->activeLocales = $this->localeRepository->getActive();
         $template->setFile(__DIR__ . '/PictureForm.latte');
         $template->render();
