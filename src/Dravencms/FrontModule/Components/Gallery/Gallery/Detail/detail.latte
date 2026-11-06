@@ -3,7 +3,7 @@
     {if $gallery->isShowName()}
         <div class="page-row">
             <h2>{$galleryTranslation->getName()}</h2>
-            <p>{$galleryTranslation->getDescription()|fileContent:'gallery.body':$galleryTranslation->getId()|noescape}</p>
+            <p>{$galleryTranslation->getDescription()|fileContent:'gallery.body', $galleryTranslation->getId()|noescape}</p>
         </div>
     {/if}
 
