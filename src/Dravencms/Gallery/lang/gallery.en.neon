@@ -62,3 +62,8 @@ acl:
             label: 'Manage galleries'
         delete:
             label: 'Delete galleries'
+
+dashboard:
+    title: "Galleries"
+    total: "Galleries"
+    active: "Enabled galleries"

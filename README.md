@@ -74,3 +74,10 @@ and remove variants owned by other packages from the File configuration. Project
 variants belong in project configuration. Update the matching File, Nette Files
 and installed Gallery/Article/Partner/Carousel releases together. No additional
 database or storage migration is needed for this configuration change.
+
+
+## Dashboard
+
+With Admin 3.5 installed, this package automatically registers an ACL-protected dashboard
+panel showing total and enabled galleries. Aggregate data is loaded only
+when an authorized user renders the panel. No setup command or migration is required.

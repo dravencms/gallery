@@ -62,3 +62,8 @@ acl:
             label: 'Spravovat galerie'
         delete:
             label: 'Mazat galerie'
+
+dashboard:
+    title: "Galerie"
+    total: "Galerie"
+    active: "Aktivní galerie"
